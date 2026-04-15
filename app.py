@@ -62,32 +62,38 @@ base_datos = {
         "pzas_base": 40,
         "intensidades": {"twin": "100tpx", "flexi_m": "90tpx", "flexi_mesa": "80tpx"}
     },
+    "OVRW": {
+        "pzas_base": 45, # Ajusta este número según la meta de este lavado
+        "intensidades": {"twin": "110tpx", "flexi_m": "95tpx", "flexi_mesa": "85tpx"}
+    },
     "MYYA": {"pzas_base": 70},
     "BLGU": {"pzas_base": 50},
     "ZRCN": {"pzas_base": 56},
     "BFOW": {"pzas_base": 43}
 }
 
-# --- FÓRMULAS MAESTRAS (Numeración limpia 1, 2, 3...) ---
+# --- FÓRMULAS MAESTRAS ---
 formulas_maestras = {
     "DELT": {
         "Info": {"Tela": "ECO BLUE (NUME)", "Corte": "MN15446-2", "Peso": "100 KG", "Pzas": "169 PZ"},
+        "Dry Process": ["1 BIGOTES TALLADOS", "2 HAND SAND", "3 LASER", "4 PLASTIFLECHA"],
+        "Lavanderia": [
+            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "50°C - 12 min", "PRODUCTO QUÍMICO": "HUMECTANTE"},
+            {"PASO": "2", "PROCESO": "STONE", "CONDICIONES": "40°C - 35 min", "PRODUCTO QUÍMICO": "ENZIMA"},
+            {"PASO": "3", "PROCESO": "SECADO", "CONDICIONES": "60°C - 60 min", "PRODUCTO QUÍMICO": "N/A"}
+        ]
+    },
+    "OVRW": {
+        "Info": {"Tela": "DEEP INDIGO", "Corte": "OV-9982", "Peso": "120 KG", "Pzas": "180 PZ"},
         "Dry Process": [
-            "1 BIGOTES TALLADOS (DIBUJADOS DELANTEROS RODILLA DELANTERA Y TRASERA)",
-            "2 HAND SAND (FIGURA – BASE – MANCHONES)",
-            "3 LASER",
-            "4 PLASTIFLECHA"
+            "1 MARCADO LÁSER INTENSO",
+            "2 LIJADO MANUAL EN COSTURAS",
+            "3 DESTRUIDOS (RIPPED EFFECTS)"
         ],
         "Lavanderia": [
-            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "50°C - 12 min", "PRODUCTO QUÍMICO": "HUMECTANTE / AMILASA"},
-            {"PASO": "2", "PROCESO": "ENJUAGUE", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "AGUA SOLA"},
-            {"PASO": "3", "PROCESO": "STONE", "CONDICIONES": "40°C - 35 min", "PRODUCTO QUÍMICO": "ENZIMA ABRASIVA"},
-            {"PASO": "4", "PROCESO": "ENJUAGUE CALIENTE", "CONDICIONES": "50°C - 5 min", "PRODUCTO QUÍMICO": "DETERGENTE"},
-            {"PASO": "5", "PROCESO": "SECADO", "CONDICIONES": "60°C - 60 min", "PRODUCTO QUÍMICO": "N/A"},
-            {"PASO": "6", "PROCESO": "NEUTRALIZADO", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "HIDROXILAMINA (2.0 KG), ANTIDHER (2.0 KG), SANDOCLEAN (2.0 KG)"},
-            {"PASO": "7", "PROCESO": "ENJUAGUE", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "AGUA SOLA"},
-            {"PASO": "8", "PROCESO": "BAJADA DE TONO", "CONDICIONES": "40°C - 5 min", "PRODUCTO QUÍMICO": "CLORO (5.0 KG)"},
-            {"PASO": "9", "PROCESO": "NEUTRALIZADO", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "BISULFITO (2.0 KG)"}
+            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "60°C - 15 min", "PRODUCTO QUÍMICO": "AMILASA"},
+            {"PASO": "2", "PROCESO": "OVERDYE (TEÑIDO)", "CONDICIONES": "50°C - 20 min", "PRODUCTO QUÍMICO": "COLORANTE REACTIVO"},
+            {"PASO": "3", "PROCESO": "SUAVIZADO", "CONDICIONES": "FRIO - 10 min", "PRODUCTO QUÍMICO": "SILICONA"}
         ]
     }
 }
@@ -101,13 +107,13 @@ if seleccion != "-- Selecciona --":
     
     st.divider()
     
-    tab1, tab2, tab3, tab4 = st.tabs(["✦ TWIN", "✧ FLEXI (M)", "✨ FLEXI (Mesa)", "🧪 FÓRMULA"])
+    tab1, tab2, tab3, tab4 = st.tabs(["🚀 TWIN", "⚙️ FLEXI (M)", "🪑 FLEXI (Mesa)", "🧪 FÓRMULA"])
 
     def mostrar_metas(pzas, intensidad=None):
         seg = int(3600 / pzas)
         c1, c2, c3 = st.columns(3)
-        with c1: st.metric("Tiempo De Marcado", f"{seg // 60}m {seg % 60}s")
-        with c2: st.metric("Pzas Por Hora", f"{pzas} pzas")
+        with c1: st.metric("Tiempo Unitario", f"{seg // 60}m {seg % 60}s")
+        with c2: st.metric("Meta Hora", f"{pzas} pzas")
         with c3: st.metric("⚡ Intensidad Láser", intensidad if intensidad else "N/D")
         st.table(pd.DataFrame({"Turno": ["8h", "10h", "12h"], "Meta Total": [pzas*8, pzas*10, pzas*12]}))
 
@@ -126,30 +132,30 @@ if seleccion != "-- Selecciona --":
                 return None
 
             # --- FILA 1: COMPARATIVA FRONTAL ---
-            st.subheader("🖌️〰️ ANÁLISIS DE PATRÓN FRONTAL")
+            st.subheader("🖼️ ANÁLISIS DE PATRÓN FRONTAL")
             col1, col2 = st.columns(2)
             with col1:
                 img = buscar_img(f"{seleccion}_frente_bmp")
                 if img: st.image(img, caption="Patrón Digital (Frente)", use_container_width=True)
-                else: st.info("Pendiente: Cargar Patrón Frente")
+                else: st.info(f"Pendiente: {seleccion}_frente_bmp.png")
             with col2:
                 img = buscar_img(f"{seleccion}_frente_lavado")
                 if img: st.image(img, caption="Resultado Post-Lavado (Frente)", use_container_width=True)
-                else: st.info("Pendiente: Cargar Foto Lavado Frente")
+                else: st.info(f"Pendiente: {seleccion}_frente_lavado.png")
 
             st.divider()
 
             # --- FILA 2: COMPARATIVA TRASERA ---
-            st.subheader("🖌️〰️ ANÁLISIS DE PATRÓN TRASERO")
+            st.subheader("🖼️ ANÁLISIS DE PATRÓN TRASERO")
             col3, col4 = st.columns(2)
             with col3:
                 img = buscar_img(f"{seleccion}_trasera_bmp")
                 if img: st.image(img, caption="Patrón Digital (Trasera)", use_container_width=True)
-                else: st.info("Pendiente: Cargar Patrón Trasero")
+                else: st.info(f"Pendiente: {seleccion}_trasera_bmp.png")
             with col4:
                 img = buscar_img(f"{seleccion}_trasera_lavado")
                 if img: st.image(img, caption="Resultado Post-Lavado (Trasera)", use_container_width=True)
-                else: st.info("Pendiente: Cargar Foto Lavado Trasero")
+                else: st.info(f"Pendiente: {seleccion}_trasera_lavado.png")
             
             st.divider()
             
