@@ -99,7 +99,7 @@ if seleccion != "-- Selecciona un lavado --":
         st.subheader(f"📊 Reporte de Producción: {seleccion}")
         
         # CREACIÓN DE PESTAÑAS PARA LAS MÁQUINAS
-        tab1, tab2, tab3 = st.tabs(["🚀 TWIN (Maniquí)", "⚙️ FLEXI (Maniquí)", "🪑 FLEXI (Mesa)"])
+        tab1, tab2, tab3 = st.tabs(["✳️ TWIN (Maniquí)", "❇️ FLEXI (Maniquí)", "✴️ FLEXI (Mesa)"])
         
         # Función para mostrar los cálculos
         def mostrar_calculos(pzas_hora):
