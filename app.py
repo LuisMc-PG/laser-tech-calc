@@ -2,16 +2,52 @@ import streamlit as st
 import pandas as pd
 import math
 
-# Configuración de página para que se vea bien en celulares
-st.set_page_config(page_title="Sistema Control Textil", page_icon="👖")
+# Configuración de página con icono de láser
+st.set_page_config(page_title="Sistema Control Textil", page_icon="⚡")
 
-st.title("👖 Sistema de Gestión de Lavados")
+# --- ESTILOS CSS PARA FONDO DE MEZCLILLA Y TEXTO ---
+st.markdown(
+    """
+    <style>
+    /* Fondo de textura de mezclilla para toda la app */
+    .stApp {
+        background-image: url("https://www.transparenttextures.com/patterns/denim.png");
+        background-color: #1a4175; /* Color azul base de mezclilla */
+        background-attachment: fixed;
+    }
+
+    /* Estilo para que los títulos y textos sean legibles sobre el fondo oscuro */
+    h1, h2, h3, h4, h5, h6, p, span, .stSelectbox label {
+        color: white !important;
+    }
+
+    /* Fondo blanco semi-transparente para las tablas y métricas */
+    .stMetric, .stDataFrame, div[data-testid="stTable"] {
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        border-radius: 10px;
+        padding: 10px;
+    }
+    
+    /* Estilo para el título principal con efecto neón láser */
+    .laser-title {
+        color: #00ff00; /* Verde láser */
+        text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# --- TÍTULO CON EFECTO LÁSER ---
+st.markdown('<h1 class="laser-title">⚡ Sistema de Gestión de Lavados</h1>', unsafe_allow_html=True)
 st.markdown("### Desarrollado por: **Luis Mc**")
 
 # --- BASE DE DATOS MAESTRA ---
 # Formato: "CÓDIGO": [Segundos, "Intensidad o Proceso", "Área"]
 base_datos = {
-    # ÁREA: LÁSER (Calculado de tu lista de piezas por hora)
+    # ÁREA: LÁSER
     "MYYA": [51, "45%", "LÁSER"],
     "BLGU": [72, "45%", "LÁSER"],
     "ZRCN": [64, "45%", "LÁSER"],
@@ -26,7 +62,7 @@ base_datos = {
     "ALPA": [67, "45%", "LÁSER"],
     "CTBU": [80, "45%", "LÁSER"],
     
-    # ÁREA: LAVANDERÍA / OTROS (No requieren cálculo de piezas láser)
+    # ÁREA: LAVANDERÍA / OTROS
     "JAIL": [0, "SUAVIZADO", "LAVANDERÍA"],
     "OEDW": [0, "TEÑIDO", "LAVANDERÍA"],
     "STONE": [0, "DESLAVE", "LAVANDERÍA"]
@@ -47,7 +83,7 @@ if seleccion != "-- Selecciona un lavado --":
     st.divider()
     
     if area == "LÁSER":
-        st.subheader(f"🔥 Información de Láser: {seleccion}")
+        st.subheader(f"⚡ Información de Láser: {seleccion}")
         
         # Formato de tiempo que pidió el jefe (Minutos y Segundos)
         minutos = segundos_totales // 60
@@ -74,6 +110,7 @@ if seleccion != "-- Selecciona un lavado --":
     else:
         # Si es un proceso de Lavandería
         st.subheader(f"🧼 Información de Lavandería: {seleccion}")
+        # Usamos st.warning para resaltar, pero el CSS se asegura de que sea legible
         st.warning(f"Este código pertenece al área de **{area}**")
         st.info(f"⚙️ **Proceso requerido:** {info_extra}")
         st.caption("Nota: Este proceso no se realiza en las máquinas láser.")
