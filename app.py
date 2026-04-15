@@ -1,53 +1,84 @@
 import streamlit as st
 import pandas as pd
+import math
 
-# Configuración de la página
-st.set_page_config(page_title="Laser Tech Calc", page_icon="🔥")
+# Configuración de página para que se vea bien en celulares
+st.set_page_config(page_title="Sistema Control Textil", page_icon="👖")
 
-# Título y Créditos
-st.title("🔥 Laser Tech Calculator")
+st.title("👖 Sistema de Gestión de Lavados")
 st.markdown("### Desarrollado por: **Luis Mc**")
-st.write("Consulta tiempos, intensidades y potencial de producción al instante.")
 
-# Base de Datos (Aquí puedes agregar más después)
+# --- BASE DE DATOS MAESTRA ---
+# Formato: "CÓDIGO": [Segundos, "Intensidad o Proceso", "Área"]
 base_datos = {
-    "DELT": {"tiempo": 110, "intensidad": "45%", "desc": "Lavado DELT Estándar"},
-    "OVRW": {"tiempo": 120, "intensidad": "52%", "desc": "Overwash Pesado"},
-    "STND": {"tiempo": 90, "intensidad": "38%", "desc": "Standard Light"},
-    "DARK": {"tiempo": 150, "intensidad": "60%", "desc": "Dark Denim Laser"}
+    # ÁREA: LÁSER (Calculado de tu lista de piezas por hora)
+    "MYYA": [51, "45%", "LÁSER"],
+    "BLGU": [72, "45%", "LÁSER"],
+    "ZRCN": [64, "45%", "LÁSER"],
+    "BFOW": [84, "45%", "LÁSER"],
+    "DELT": [90, "45%", "LÁSER"],
+    "MOBU": [84, "45%", "LÁSER"],
+    "BLUV": [72, "45%", "LÁSER"],
+    "RGRI": [80, "45%", "LÁSER"],
+    "OVRW": [84, "45%", "LÁSER"],
+    "DSP1": [84, "45%", "LÁSER"],
+    "CUMB": [84, "45%", "LÁSER"],
+    "ALPA": [67, "45%", "LÁSER"],
+    "CTBU": [80, "45%", "LÁSER"],
+    
+    # ÁREA: LAVANDERÍA / OTROS (No requieren cálculo de piezas láser)
+    "JAIL": [0, "SUAVIZADO", "LAVANDERÍA"],
+    "OEDW": [0, "TEÑIDO", "LAVANDERÍA"],
+    "STONE": [0, "DESLAVE", "LAVANDERÍA"]
 }
 
-# Buscador
-busqueda = st.text_input("Escribe el nombre del lavado:", placeholder="Ej. DELT").upper()
+# --- INTERFAZ DEL JEFE ---
 
-if busqueda:
-    if busqueda in base_datos:
-        datos = base_datos[busqueda]
-        t = datos['tiempo']
+# Lista desplegable automática
+opciones = sorted(list(base_datos.keys()))
+seleccion = st.selectbox("Busca o selecciona un código:", ["-- Selecciona un lavado --"] + opciones)
+
+if seleccion != "-- Selecciona un lavado --":
+    datos = base_datos[seleccion]
+    segundos_totales = datos[0]
+    info_extra = datos[1]
+    area = datos[2]
+    
+    st.divider()
+    
+    if area == "LÁSER":
+        st.subheader(f"🔥 Información de Láser: {seleccion}")
         
-        st.success(f"Resultados para: {busqueda}")
+        # Formato de tiempo que pidió el jefe (Minutos y Segundos)
+        minutos = segundos_totales // 60
+        segundos_rest = segundos_totales % 60
+        tiempo_texto = f"{minutos} min {segundos_rest} seg ({segundos_totales} seg)"
         
         col1, col2 = st.columns(2)
         with col1:
-            st.metric("Tiempo de Marcado", f"{t} seg")
+            st.metric("Tiempo de Marcado", tiempo_texto)
         with col2:
-            st.metric("Intensidad Láser", datos['intensidad'])
+            st.metric("Intensidad", info_extra)
             
-        st.info(f"**Descripción:** {datos['desc']}")
-
-        # Tabla de Producción
-        st.write("---")
-        st.subheader("Potencial de Producción")
+        # Tabla de producción automática
+        st.markdown("#### 🕒 Producción Estimada")
         horas = [8, 10, 12, 24]
-        produccion = [int((h * 3600) / t) for h in horas]
+        produccion = [math.floor((h * 3600) / segundos_totales) for h in horas]
         
         df = pd.DataFrame({
-            "Jornada Laboral": [f"{h} Horas" for h in horas],
-            "Prendas Totales": [f"{p} pzas" for p in produccion]
+            "Turno": [f"{h} Horas" for h in horas],
+            "Capacidad": [f"{p} prendas" for p in produccion]
         })
         st.table(df)
+        
     else:
-        st.error("Lavado no encontrado. Contacta a Luis Mc para darlo de alta.")
+        # Si es un proceso de Lavandería
+        st.subheader(f"🧼 Información de Lavandería: {seleccion}")
+        st.warning(f"Este código pertenece al área de **{area}**")
+        st.info(f"⚙️ **Proceso requerido:** {info_extra}")
+        st.caption("Nota: Este proceso no se realiza en las máquinas láser.")
 
-st.markdown("---")
-st.caption("© 2026 Sistema de Gestión Láser - Atotonilco de Tula, Hgo.")
+# Pie de página profesional
+st.sidebar.markdown("---")
+st.sidebar.write("✅ **Base de datos actualizada**")
+st.sidebar.write(f"Total de códigos: {len(base_datos)}")
