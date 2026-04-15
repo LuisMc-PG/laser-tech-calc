@@ -126,7 +126,7 @@ if seleccion != "-- Selecciona --":
                 return None
 
             # --- FILA 1: COMPARATIVA FRONTAL ---
-            st.subheader("🖼️ ANÁLISIS DE PATRÓN FRONTAL")
+            st.subheader("🖌️〰️ ANÁLISIS DE PATRÓN FRONTAL")
             col1, col2 = st.columns(2)
             with col1:
                 img = buscar_img(f"{seleccion}_frente_bmp")
