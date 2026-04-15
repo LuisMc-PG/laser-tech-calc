@@ -3,10 +3,10 @@ import pandas as pd
 import os
 from PIL import Image
 
-# Configuración de la App con estilo Denim 👖
+# Configuración de la App 👖
 st.set_page_config(page_title="Sistema Control Textil", page_icon="👖", layout="wide")
 
-# --- ESTILOS CSS PERSONALIZADOS ---
+# --- ESTILOS CSS ---
 st.markdown(
     """
     <style>
@@ -95,28 +95,32 @@ formulas_maestras = {
     }
 }
 
-# --- FUNCIÓN PARA MOSTRAR IMÁGENES DERECHAS ---
+# --- FUNCIONES DE APOYO ---
 def mostrar_imagen_optimizada(nombre_base, es_bmp=False):
     img_path = None
     for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
         if os.path.exists(nombre_base + ext):
             img_path = nombre_base + ext
             break
-    
     if img_path:
         try:
             image = Image.open(img_path)
-            # Solo rotamos si NO es el diseño digital (BMP) y si está horizontal
             if not es_bmp:
                 width, height = image.size
                 if width > height:
                     image = image.rotate(-90, expand=True)
             st.image(image, use_container_width=True)
         except: st.error("Error al cargar imagen")
-    else:
-        st.info(f"Pendiente: {nombre_base}")
+    else: st.info(f"Pendiente: {nombre_base}")
 
-# --- INTERFAZ ---
+def calcular_metas_tabla(pzas_hora):
+    df_metas = pd.DataFrame({
+        "Turno": ["8 Horas", "10 Horas", "12 Horas", "24 Horas"],
+        "Meta Total (Pzas)": [pzas_hora*8, pzas_hora*10, pzas_hora*12, pzas_hora*24]
+    })
+    st.table(df_metas)
+
+# --- INTERFAZ PRINCIPAL ---
 opciones = sorted(list(base_datos.keys()))
 seleccion = st.selectbox("Busca o Selecciona Código de Lavado:", ["-- Selecciona --"] + opciones)
 
@@ -128,56 +132,47 @@ if seleccion != "-- Selecciona --":
 
     st.divider()
 
-    # Creación de pestañas (Metas solo si hay láser)
     if config["lleva_laser"]:
         t1, t2, t3, t4 = st.tabs(["🚀 TWIN", "⚙️ FLEXI (M)", "🪑 FLEXI (Mesa)", "🧪 FÓRMULA & FOTOS"])
         
         with t1:
             p = config["pzas_base"]
             seg = int(3600/p)
-            st.metric("Meta Hora", f"{p} pzas", f"{seg//60}m {seg%60}s")
-            st.write(f"Intensidad: {config['intensidades']['twin']}")
+            c1, c2 = st.columns(2)
+            c1.metric("Meta Hora", f"{p} pzas", f"{seg//60}m {seg % 60}s")
+            c2.metric("Intensidad Láser", config['intensidades']['twin'])
+            st.write("**PROYECCIÓN DE TURNO:**")
+            calcular_metas_tabla(p)
+            
         with t2:
             p = config["pzas_base"] + 8
             seg = int(3600/p)
-            st.metric("Meta Hora", f"{p} pzas", f"{seg//60}m {seg%60}s")
-            st.write(f"Intensidad: {config['intensidades']['flexi_m']}")
+            c1, c2 = st.columns(2)
+            c1.metric("Meta Hora", f"{p} pzas", f"{seg//60}m {seg % 60}s")
+            c2.metric("Intensidad Láser", config['intensidades']['flexi_m'])
+            st.write("**PROYECCIÓN DE TURNO:**")
+            calcular_metas_tabla(p)
+            
         with t3:
             p = config["pzas_base"] - 5
             seg = int(3600/p)
-            st.metric("Meta Hora", f"{p} pzas", f"{seg//60}m {seg%60}s")
-            st.write(f"Intensidad: {config['intensidades']['flexi_mesa']}")
+            c1, c2 = st.columns(2)
+            c1.metric("Meta Hora", f"{p} pzas", f"{seg//60}m {seg % 60}s")
+            c2.metric("Intensidad Láser", config['intensidades']['flexi_mesa'])
+            st.write("**PROYECCIÓN DE TURNO:**")
+            calcular_metas_tabla(p)
         
         with t4:
             f = formulas_maestras.get(seleccion)
             if f:
                 st.success(f"📋 ANÁLISIS TÉCNICO: {seleccion}")
-                
-                # Fila de Imágenes Frente
                 st.subheader("🖼️ COMPARATIVA FRONTAL")
-                c1, c2 = st.columns(2)
-                with c1: mostrar_imagen_optimizada(f"{seleccion}_frente_bmp", es_bmp=True)
-                with c2: mostrar_imagen_optimizada(f"{seleccion}_frente_lavado")
-                
+                col1, col2 = st.columns(2)
+                with col1: mostrar_imagen_optimizada(f"{seleccion}_frente_bmp", es_bmp=True)
+                with col2: mostrar_imagen_optimizada(f"{seleccion}_frente_lavado")
                 st.divider()
-                
-                # Fila de Imágenes Trasera
                 st.subheader("🖼️ COMPARATIVA TRASERA")
-                c3, c4 = st.columns(2)
-                with c3: mostrar_imagen_optimizada(f"{seleccion}_trasera_bmp", es_bmp=True)
-                with c4: mostrar_imagen_optimizada(f"{seleccion}_trasera_lavado")
-
-                st.divider()
-                st.write("**DRY PROCESS:**", f["Dry Process"])
-                st.write("**LAVANDERÍA:**")
-                st.table(pd.DataFrame(f["Lavanderia"]))
-    else:
-        # Lavados sin láser van directo a la fórmula
-        f = formulas_maestras.get(seleccion)
-        if f:
-            st.success(f"📋 RUTA DE PROCESO MANUAL: {seleccion}")
-            st.write("**DRY PROCESS:**", f["Dry Process"])
-            st.write("**LAVANDERÍA:**")
-            st.table(pd.DataFrame(f["Lavanderia"]))
-
-st.sidebar.write(f"Ingeniería de Software | Luis Mc")
+                col3, col4 = st.columns(2)
+                with col3: mostrar_imagen_optimizada(f"{seleccion}_trasera_bmp", es_bmp=True)
+                with col4: mostrar_imagen_optimizada(f"{seleccion}_trasera_lavado")
+                st.divider
