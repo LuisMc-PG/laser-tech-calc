@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+from PIL import Image # Libería nueva para manejar imágenes
 
 # Configuración de la App con estilo Denim 👖
 st.set_page_config(page_title="Sistema Control Textil", page_icon="👖", layout="wide")
@@ -57,7 +58,6 @@ st.markdown('<h1 class="laser-title">👖 Sistema de Gestión de Lavados</h1>', 
 st.caption(f"Ingeniería de Procesos | Luis Mc")
 
 # --- BASE DE DATOS DE PRODUCCIÓN ---
-# Aquí agregamos el OVRW con los datos que pediste
 base_datos = {
     "DELT": {
         "pzas_base": 40,
@@ -94,7 +94,6 @@ formulas_maestras = {
     }
 }
 
-# Esto hace que la lista se ordene alfabéticamente
 opciones = sorted(list(base_datos.keys()))
 seleccion = st.selectbox("Selecciona Código de Lavado:", ["-- Selecciona --"] + opciones)
 
@@ -123,21 +122,46 @@ if seleccion != "-- Selecciona --":
             f = formulas_maestras[seleccion]
             st.success(f"📋 VISUALIZACIÓN Y CONTRASTE: PATRÓN DE DISEÑO VS. ACABADO TEXTIL - {seleccion}")
             
-            def buscar_img(nombre_base):
+            # Función MEJORADA para buscar y arreglar la rotación
+            def buscar_y_rotar_img(nombre_base):
+                img_path = None
                 for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
-                    if os.path.exists(nombre_base + ext): return nombre_base + ext
+                    if os.path.exists(nombre_base + ext):
+                        img_path = nombre_base + ext
+                        break
+                
+                if img_path:
+                    try:
+                        # Abrimos la imagen con Pillow
+                        image = Image.open(img_path)
+                        # Obtenemos ancho y alto
+                        width, height = image.size
+                        
+                        # Si es más ancha que alta, es horizontal. La rotamos 90 grados a la derecha.
+                        if width > height:
+                            image = image.rotate(-90, expand=True)
+                        return image
+                    except Exception as e:
+                        return None # Si algo falla, no muestra nada
                 return None
 
             # --- COMPARATIVA FRONTAL ---
             st.subheader("🖼️ ANÁLISIS DE PATRÓN FRONTAL")
             col1, col2 = st.columns(2)
             with col1:
-                img = buscar_img(f"{seleccion}_frente_bmp")
-                if img: st.image(img, caption="Patrón Digital (Frente)", use_container_width=True)
+                # Ojo: los BMP no se rotan porque esos ya vienen bien de Photoshop
+                img_bmp = None
+                for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
+                    if os.path.exists(f"{seleccion}_frente_bmp" + ext):
+                        img_bmp = f"{seleccion}_frente_bmp" + ext
+                        break
+                if img_bmp: st.image(img_bmp, caption="Patrón Digital (Frente)", use_container_width=True)
                 else: st.info(f"Pendiente: {seleccion}_frente_bmp.png")
+            
             with col2:
-                img = buscar_img(f"{seleccion}_frente_lavado")
-                if img: st.image(img, caption="Resultado Post-Lavado (Frente)", use_container_width=True)
+                # Usamos la función mejorada para la prenda LAVADA
+                img_lavado = buscar_y_rotar_img(f"{seleccion}_frente_lavado")
+                if img_lavado: st.image(img_lavado, caption="Resultado Post-Lavado (Frente)", use_container_width=True)
                 else: st.info(f"Pendiente: {seleccion}_frente_lavado.png")
 
             st.divider()
@@ -146,12 +170,18 @@ if seleccion != "-- Selecciona --":
             st.subheader("🖼️ ANÁLISIS DE PATRÓN TRASERO")
             col3, col4 = st.columns(2)
             with col3:
-                img = buscar_img(f"{seleccion}_trasera_bmp")
-                if img: st.image(img, caption="Patrón Digital (Trasera)", use_container_width=True)
+                img_bmp_tras = None
+                for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
+                    if os.path.exists(f"{seleccion}_trasera_bmp" + ext):
+                        img_bmp_tras = f"{seleccion}_trasera_bmp" + ext
+                        break
+                if img_bmp_tras: st.image(img_bmp_tras, caption="Patrón Digital (Trasera)", use_container_width=True)
                 else: st.info(f"Pendiente: {seleccion}_trasera_bmp.png")
+            
             with col4:
-                img = buscar_img(f"{seleccion}_trasera_lavado")
-                if img: st.image(img, caption="Resultado Post-Lavado (Trasera)", use_container_width=True)
+                # Usamos la función mejorada para la prenda LAVADA trasera
+                img_lavado_tras = buscar_y_rotar_img(f"{seleccion}_trasera_lavado")
+                if img_lavado_tras: st.image(img_lavado_tras, caption="Resultado Post-Lavado (Trasera)", use_container_width=True)
                 else: st.info(f"Pendiente: {seleccion}_trasera_lavado.png")
             
             st.divider()
