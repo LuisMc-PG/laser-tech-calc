@@ -16,32 +16,43 @@ st.markdown(
         background-attachment: fixed;
     }
 
-    /* 2. Texto general en blanco (para que se vea sobre la mezclilla) */
+    /* 2. Texto general en blanco */
     h1, h2, h3, h4, h5, h6, p, label, .stMarkdown {
         color: #FFFFFF !important;
         text-shadow: 2px 2px 4px #000000 !important;
     }
 
-    /* 3. Cuadros de resultados (Métricas, Tablas y Buscador) */
+    /* 3. EL BUSCADOR (SELECTBOX) - Blanco/Gris claro para que resalte */
+    div[data-baseweb="select"] {
+        background-color: #f0f2f6 !important; /* Gris muy claro/blanco */
+        border-radius: 10px !important;
+        border: 3px solid #00ff00 !important; /* Borde neón para que brille */
+    }
+    
+    /* Texto dentro del buscador (negro para contraste) */
+    div[data-baseweb="select"] * {
+        color: #000000 !important;
+        text-shadow: none !important;
+        font-weight: bold !important;
+    }
+
+    /* 4. Cuadros de resultados (Métricas y Tablas) */
     [data-testid="stMetric"], 
     .stDataFrame, 
-    div[data-testid="stTable"], 
-    .stSelectbox div[data-baseweb="select"],
+    div[data-testid="stTable"],
     div[data-testid="stAlert"] {
         background-color: rgba(255, 255, 255, 1) !important;
         border-radius: 10px !important;
         padding: 10px !important;
-        border: 2px solid #00ff00 !important; /* Borde verde láser */
     }
 
-    /* 4. ¡EL TRUCO! Forzar texto OSCURO solo dentro de los cuadros blancos */
+    /* Texto oscuro dentro de resultados */
     [data-testid="stMetric"] * , 
     .stDataFrame * , 
     div[data-testid="stTable"] * , 
-    .stSelectbox div[data-baseweb="select"] * ,
     div[data-testid="stAlert"] * {
-        color: #1a4175 !important; /* Azul oscuro */
-        text-shadow: none !important; /* Quitar la sombra negra para que sea legible */
+        color: #1a4175 !important;
+        text-shadow: none !important;
     }
 
     /* 5. Título neón */
@@ -80,6 +91,7 @@ base_datos = {
 }
 
 opciones = sorted(list(base_datos.keys()))
+# El buscador ahora será gris claro con letras negras
 seleccion = st.selectbox("Busca o selecciona un código:", ["-- Selecciona un lavado --"] + opciones)
 
 if seleccion != "-- Selecciona un lavado --":
@@ -115,7 +127,6 @@ if seleccion != "-- Selecciona un lavado --":
         
     else:
         st.subheader(f"🧼 Detalle Lavandería: {seleccion}")
-        # Aquí también se verá oscuro el texto sobre el fondo claro
         st.info(f"📍 Área: {area} | ⚙️ Proceso: {info_extra}")
 
 st.sidebar.markdown("---")
