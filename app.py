@@ -22,18 +22,26 @@ st.markdown(
         text-shadow: 2px 2px 4px #000000 !important;
     }
 
-    /* 3. EL BUSCADOR (SELECTBOX) - BLANCO PURO */
-    div[data-baseweb="select"] {
-        background-color: #FFFFFF !important; /* Blanco puro */
+    /* 3. EL BUSCADOR (SELECTBOX) - BLANCO TOTAL */
+    /* Forzamos el fondo blanco en todas las capas del buscador */
+    div[data-baseweb="select"], div[data-baseweb="select"] > div {
+        background-color: #FFFFFF !important; 
         border-radius: 10px !important;
-        border: 3px solid #00ff00 !important; /* Borde neón */
     }
     
-    /* Texto dentro del buscador (Negro para contraste total) */
-    div[data-baseweb="select"] * {
+    /* Borde verde neón para que resalte */
+    div[data-testid="stSelectbox"] > div:nth-child(1) > div {
+        border: 3px solid #00ff00 !important;
+    }
+
+    /* TEXTO DENTRO DEL BUSCADOR: Negro intenso y sin sombras */
+    div[data-baseweb="select"] span, 
+    div[data-baseweb="select"] div, 
+    div[role="listbox"] div {
         color: #000000 !important;
         text-shadow: none !important;
         font-weight: bold !important;
+        font-size: 1.1rem !important;
     }
 
     /* 4. Cuadros de resultados (Métricas y Tablas) */
