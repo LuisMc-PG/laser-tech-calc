@@ -9,33 +9,42 @@ st.set_page_config(page_title="Sistema Control Textil", page_icon="👖")
 st.markdown(
     """
     <style>
-    /* Fondo de mezclilla */
+    /* 1. Fondo de mezclilla */
     .stApp {
         background-image: url("https://www.transparenttextures.com/patterns/denim.png");
         background-color: #1a4175;
         background-attachment: fixed;
     }
 
-    /* Contraste extremo para textos fuera de cuadros */
+    /* 2. Texto general en blanco (para que se vea sobre la mezclilla) */
     h1, h2, h3, h4, h5, h6, p, label, .stMarkdown {
         color: #FFFFFF !important;
         text-shadow: 2px 2px 4px #000000 !important;
-        font-weight: bold !important;
     }
 
-    /* Cuadros de métricas y tablas con fondo sólido para lectura fácil */
-    [data-testid="stMetric"], .stDataFrame, div[data-testid="stTable"], .stSelectbox div[data-baseweb="select"] {
+    /* 3. Cuadros de resultados (Métricas, Tablas y Buscador) */
+    [data-testid="stMetric"], 
+    .stDataFrame, 
+    div[data-testid="stTable"], 
+    .stSelectbox div[data-baseweb="select"],
+    div[data-testid="stAlert"] {
         background-color: rgba(255, 255, 255, 1) !important;
         border-radius: 10px !important;
-        padding: 5px;
+        padding: 10px !important;
+        border: 2px solid #00ff00 !important; /* Borde verde láser */
     }
 
-    /* Forzar texto oscuro dentro de los cuadros blancos */
-    [data-testid="stMetric"] div, .stDataFrame div, td, th, div[role="listbox"] {
-        color: #1a4175 !important;
-        text-shadow: none !important;
+    /* 4. ¡EL TRUCO! Forzar texto OSCURO solo dentro de los cuadros blancos */
+    [data-testid="stMetric"] * , 
+    .stDataFrame * , 
+    div[data-testid="stTable"] * , 
+    .stSelectbox div[data-baseweb="select"] * ,
+    div[data-testid="stAlert"] * {
+        color: #1a4175 !important; /* Azul oscuro */
+        text-shadow: none !important; /* Quitar la sombra negra para que sea legible */
     }
-    
+
+    /* 5. Título neón */
     .laser-title {
         color: #00ff00 !important;
         text-shadow: 0 0 15px #00ff00 !important;
@@ -46,7 +55,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- TÍTULO CON PANTALÓN ---
+# --- TÍTULO ---
 st.markdown('<h1 class="laser-title">👖 Sistema de Gestión de Lavados</h1>', unsafe_allow_html=True)
 st.markdown("### Desarrollado por: **Luis Mc**")
 
@@ -106,6 +115,7 @@ if seleccion != "-- Selecciona un lavado --":
         
     else:
         st.subheader(f"🧼 Detalle Lavandería: {seleccion}")
+        # Aquí también se verá oscuro el texto sobre el fondo claro
         st.info(f"📍 Área: {area} | ⚙️ Proceso: {info_extra}")
 
 st.sidebar.markdown("---")
