@@ -68,13 +68,13 @@ base_datos = {
     }
 }
 
-# --- FÓRMULAS MAESTRAS (Información real del archivo OVRW) ---
+# --- FÓRMULAS MAESTRAS (Actualizada con cantidades exactas) ---
 formulas_maestras = {
     "DELT": {
         "Info": {"Tela": "ECO BLUE (NUME)", "Corte": "MN15446-2", "Peso": "100 KG", "Pzas": "169 PZ"},
         "Dry Process": ["1 BIGOTES TALLADOS", "2 HAND SAND", "3 LASER", "4 PLASTIFLECHA"],
         "Lavanderia": [
-            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "50°C - 12 min", "PRODUCTO QUÍMICO": "HUMECTANTE"}
+            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "50°C - 12 min", "PRODUCTO QUÍMICO": "HUMECTANTE / AMILASA"}
         ]
     },
     "OVRW": {
@@ -84,11 +84,11 @@ formulas_maestras = {
             "2 HAND SAND (FIGURA – BASE – MANCHON)"
         ],
         "Lavanderia": [
-            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "FRIO - 10 min", "PRODUCTO QUÍMICO": "ANTIDHER / SANDOCLEAN / ALFADHER"},
-            {"PASO": "2", "PROCESO": "SOPLAR SKY (MANUAL)", "CONDICIONES": "FIGURA-BASE-MANCHON", "PRODUCTO QUÍMICO": "NEARBLEACH / CATALINE SKY / PEROXIDO"},
+            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "FRIO - 10 min", "PRODUCTO QUÍMICO": "ANTIDHER (1.0 KG) / SANDOCLEAN (1.0 KG) / ALFADHER (300 GRS)"},
+            {"PASO": "2", "PROCESO": "SOPLAR SKY", "CONDICIONES": "FIGURA-BASE-MANCHON", "PRODUCTO QUÍMICO": "NEARBLEACH (350 GRS) / CATALINE SKY (75 GRS) / PEROXIDO (75 GRS)"},
             {"PASO": "3", "PROCESO": "NEUTRALIZADO", "CONDICIONES": "FRIO - 5 min", "PRODUCTO QUÍMICO": "HIDROXILAMINA (2.0 KG)"},
             {"PASO": "4", "PROCESO": "ENJUAGUE", "CONDICIONES": "30°C - 3 min", "PRODUCTO QUÍMICO": "AGUA SOLA"},
-            {"PASO": "5", "PROCESO": "ABRASIÓN", "CONDICIONES": "FRIO - 20 min", "PRODUCTO QUÍMICO": "HERZYME H CONC / ANTIDHER / SANDOCLEAN / PROTECTHER BA"},
+            {"PASO": "5", "PROCESO": "ABRASIÓN", "CONDICIONES": "FRIO - 20 min", "PRODUCTO QUÍMICO": "HERZYME H CONC (150 GRS) / ANTIDHER (1.0 KG) / SANDOCLEAN (1.0 KG) / PROTECTHER BA (300 GRS)"},
             {"PASO": "6", "PROCESO": "ENJUAGUE", "CONDICIONES": "FRIO - 3 min", "PRODUCTO QUÍMICO": "AGUA SOLA"}
         ]
     }
