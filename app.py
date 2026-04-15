@@ -130,4 +130,4 @@ if seleccion != "-- Selecciona un lavado --":
 # Pie de página profesional
 st.sidebar.markdown("---")
 st.sidebar.write("✅ **Base de datos actualizada**")
-st.sidebar.write(f"
+st.sidebar.write(f"Total de códigos: {len(base_datos)}")
