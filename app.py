@@ -101,13 +101,13 @@ if seleccion != "-- Selecciona --":
     
     st.divider()
     
-    tab1, tab2, tab3, tab4 = st.tabs(["🚀 TWIN", "⚙️ FLEXI (M)", "🪑 FLEXI (Mesa)", "🧪 FÓRMULA"])
+    tab1, tab2, tab3, tab4 = st.tabs(["✦ TWIN", "✧ FLEXI (M)", "✨ FLEXI (Mesa)", "🧪 FÓRMULA"])
 
     def mostrar_metas(pzas, intensidad=None):
         seg = int(3600 / pzas)
         c1, c2, c3 = st.columns(3)
-        with c1: st.metric("Tiempo Unitario", f"{seg // 60}m {seg % 60}s")
-        with c2: st.metric("Meta Hora", f"{pzas} pzas")
+        with c1: st.metric("Tiempo De Marcado", f"{seg // 60}m {seg % 60}s")
+        with c2: st.metric("Pzas Por Hora", f"{pzas} pzas")
         with c3: st.metric("⚡ Intensidad Láser", intensidad if intensidad else "N/D")
         st.table(pd.DataFrame({"Turno": ["8h", "10h", "12h"], "Meta Total": [pzas*8, pzas*10, pzas*12]}))
 
