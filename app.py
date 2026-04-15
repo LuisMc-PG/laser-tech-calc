@@ -54,7 +54,7 @@ st.markdown(
 )
 
 st.markdown('<h1 class="laser-title">👖 Sistema de Gestión de Lavados</h1>', unsafe_allow_html=True)
-st.caption(f"Control de Calidad y Metas de Producción | Usuario: Luis Mc")
+st.caption(f"Ingeniería de Procesos | Luis Mc")
 
 # --- BASE DE DATOS DE PRODUCCIÓN ---
 base_datos = {
@@ -68,26 +68,26 @@ base_datos = {
     "BFOW": {"pzas_base": 43}
 }
 
-# --- FÓRMULAS MAESTRAS (CLON EXACTO DEL EXCEL) ---
+# --- FÓRMULAS MAESTRAS (Numeración limpia 1, 2, 3...) ---
 formulas_maestras = {
     "DELT": {
         "Info": {"Tela": "ECO BLUE (NUME)", "Corte": "MN15446-2", "Peso": "100 KG", "Pzas": "169 PZ"},
         "Dry Process": [
-            "1.0 BIGOTES TALLADOS (DIBUJADOS DELANTEROS RODILLA DELANTERA Y TRASERA)",
-            "2.0 HAND SAND (FIGURA – BASE – MANCHONES)",
-            "3.0 LASER",
-            "4.0 PLASTIFLECHA"
+            "1 BIGOTES TALLADOS (DIBUJADOS DELANTEROS RODILLA DELANTERA Y TRASERA)",
+            "2 HAND SAND (FIGURA – BASE – MANCHONES)",
+            "3 LASER",
+            "4 PLASTIFLECHA"
         ],
         "Lavanderia": [
-            {"PASO": "4.0", "PROCESO": "DESENGOME", "CONDICIONES": "50°C - 12 min", "PRODUCTO QUÍMICO": "HUMECTANTE / AMILASA"},
-            {"PASO": "5.0", "PROCESO": "ENJUAGUE", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "AGUA SOLA"},
-            {"PASO": "6.0", "PROCESO": "STONE", "CONDICIONES": "40°C - 35 min", "PRODUCTO QUÍMICO": "ENZIMA ABRASIVA"},
-            {"PASO": "10.0", "PROCESO": "ENJUAGUE CALIENTE", "CONDICIONES": "50°C - 5 min", "PRODUCTO QUÍMICO": "DETERGENTE"},
-            {"PASO": "14.0", "PROCESO": "SECADO", "CONDICIONES": "60°C - 60 min", "PRODUCTO QUÍMICO": "N/A"},
-            {"PASO": "17.0", "PROCESO": "NEUTRALIZADO", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "HIDROXILAMINA (2.0 KG), ANTIDHER (2.0 KG), SANDOCLEAN (2.0 KG)"},
-            {"PASO": "18.0", "PROCESO": "ENJUAGUE", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "AGUA SOLA"},
-            {"PASO": "19.0", "PROCESO": "BAJADA DE TONO", "CONDICIONES": "40.0°C - 5 min", "PRODUCTO QUÍMICO": "CLORO (5.0 KG)"},
-            {"PASO": "20.0", "PROCESO": "NEUTRALIZADO", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "BISULFITO (2.0 KG)"}
+            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "50°C - 12 min", "PRODUCTO QUÍMICO": "HUMECTANTE / AMILASA"},
+            {"PASO": "2", "PROCESO": "ENJUAGUE", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "AGUA SOLA"},
+            {"PASO": "3", "PROCESO": "STONE", "CONDICIONES": "40°C - 35 min", "PRODUCTO QUÍMICO": "ENZIMA ABRASIVA"},
+            {"PASO": "4", "PROCESO": "ENJUAGUE CALIENTE", "CONDICIONES": "50°C - 5 min", "PRODUCTO QUÍMICO": "DETERGENTE"},
+            {"PASO": "5", "PROCESO": "SECADO", "CONDICIONES": "60°C - 60 min", "PRODUCTO QUÍMICO": "N/A"},
+            {"PASO": "6", "PROCESO": "NEUTRALIZADO", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "HIDROXILAMINA (2.0 KG), ANTIDHER (2.0 KG), SANDOCLEAN (2.0 KG)"},
+            {"PASO": "7", "PROCESO": "ENJUAGUE", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "AGUA SOLA"},
+            {"PASO": "8", "PROCESO": "BAJADA DE TONO", "CONDICIONES": "40°C - 5 min", "PRODUCTO QUÍMICO": "CLORO (5.0 KG)"},
+            {"PASO": "9", "PROCESO": "NEUTRALIZADO", "CONDICIONES": "FRIO - 4 min", "PRODUCTO QUÍMICO": "BISULFITO (2.0 KG)"}
         ]
     }
 }
@@ -118,7 +118,7 @@ if seleccion != "-- Selecciona --":
     with tab4:
         if seleccion in formulas_maestras:
             f = formulas_maestras[seleccion]
-            st.success(f"📋 COMPARATIVA TÉCNICA DE DISEÑO VS RESULTADO: {seleccion}")
+            st.success(f"📋 VISUALIZACIÓN Y CONTRASTE: PATRÓN DE DISEÑO VS. ACABADO TEXTIL - {seleccion}")
             
             def buscar_img(nombre_base):
                 for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
@@ -126,36 +126,33 @@ if seleccion != "-- Selecciona --":
                 return None
 
             # --- FILA 1: COMPARATIVA FRONTAL ---
-            st.subheader("👕 VISTA FRONTAL")
+            st.subheader("🖼️ ANÁLISIS DE PATRÓN FRONTAL")
             col1, col2 = st.columns(2)
             with col1:
                 img = buscar_img(f"{seleccion}_frente_bmp")
-                if img: st.image(img, caption="1. DISEÑO BMP (Frente)", use_container_width=True)
-                else: st.info("Subir: " + f"{seleccion}_frente_bmp.png")
-            
+                if img: st.image(img, caption="Patrón Digital (Frente)", use_container_width=True)
+                else: st.info("Pendiente: Cargar Patrón Frente")
             with col2:
                 img = buscar_img(f"{seleccion}_frente_lavado")
-                if img: st.image(img, caption="2. LAVADO FINAL (Frente)", use_container_width=True)
-                else: st.info("Subir: " + f"{seleccion}_frente_lavado.png")
+                if img: st.image(img, caption="Resultado Post-Lavado (Frente)", use_container_width=True)
+                else: st.info("Pendiente: Cargar Foto Lavado Frente")
 
             st.divider()
 
             # --- FILA 2: COMPARATIVA TRASERA ---
-            st.subheader("👖 VISTA TRASERA")
+            st.subheader("🖼️ ANÁLISIS DE PATRÓN TRASERO")
             col3, col4 = st.columns(2)
             with col3:
                 img = buscar_img(f"{seleccion}_trasera_bmp")
-                if img: st.image(img, caption="3. DISEÑO BMP (Trasera)", use_container_width=True)
-                else: st.info("Subir: " + f"{seleccion}_trasera_bmp.png")
-
+                if img: st.image(img, caption="Patrón Digital (Trasera)", use_container_width=True)
+                else: st.info("Pendiente: Cargar Patrón Trasero")
             with col4:
                 img = buscar_img(f"{seleccion}_trasera_lavado")
-                if img: st.image(img, caption="4. LAVADO FINAL (Trasera)", use_container_width=True)
-                else: st.info("Subir: " + f"{seleccion}_trasera_lavado.png")
+                if img: st.image(img, caption="Resultado Post-Lavado (Trasera)", use_container_width=True)
+                else: st.info("Pendiente: Cargar Foto Lavado Trasero")
             
             st.divider()
             
-            # --- DATOS TÉCNICOS Y TABLA ---
             col_a, col_b = st.columns(2)
             with col_a:
                 st.write("**D R Y   P R O C E S S:**")
@@ -163,10 +160,10 @@ if seleccion != "-- Selecciona --":
             with col_b:
                 st.write("**DATOS TÉCNICOS:**")
                 st.write(f"Tela: {f['Info']['Tela']}")
-                st.write(f"Peso: {f['Info']['Peso']}")
-                st.write(f"Piezas: {f['Info']['Pzas']}")
+                st.write(f"Corte: {f['Info']['Corte']}")
+                st.write(f"Carga: {f['Info']['Peso']} / {f['Info']['Pzas']}")
 
             st.write("**L A V A N D E R Í A:**")
             st.table(pd.DataFrame(f["Lavanderia"]))
 
-st.sidebar.write(f"Ingeniería de Software - UTEL")
+st.sidebar.write(f"Ingeniería de Software | Luis Mc")
