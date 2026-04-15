@@ -140,7 +140,7 @@ if seleccion != "-- Selecciona --":
             st.divider()
 
             # --- FILA 2: COMPARATIVA TRASERA ---
-            st.subheader("🖼️ ANÁLISIS DE PATRÓN TRASERO")
+            st.subheader("🖌️〰️ ANÁLISIS DE PATRÓN TRASERO")
             col3, col4 = st.columns(2)
             with col3:
                 img = buscar_img(f"{seleccion}_trasera_bmp")
