@@ -57,14 +57,15 @@ st.markdown('<h1 class="laser-title">👖 Sistema de Gestión de Lavados</h1>', 
 st.caption(f"Ingeniería de Procesos | Luis Mc")
 
 # --- BASE DE DATOS DE PRODUCCIÓN ---
+# Aquí agregamos el OVRW con los datos que pediste
 base_datos = {
     "DELT": {
         "pzas_base": 40,
         "intensidades": {"twin": "100tpx", "flexi_m": "90tpx", "flexi_mesa": "80tpx"}
     },
     "OVRW": {
-        "pzas_base": 45, # Ajusta este número según la meta de este lavado
-        "intensidades": {"twin": "110tpx", "flexi_m": "95tpx", "flexi_mesa": "85tpx"}
+        "pzas_base": 43,
+        "intensidades": {"twin": "90tpx", "flexi_m": "70tpx", "flexi_mesa": "56tpx"}
     },
     "MYYA": {"pzas_base": 70},
     "BLGU": {"pzas_base": 50},
@@ -84,20 +85,16 @@ formulas_maestras = {
         ]
     },
     "OVRW": {
-        "Info": {"Tela": "DEEP INDIGO", "Corte": "OV-9982", "Peso": "120 KG", "Pzas": "180 PZ"},
-        "Dry Process": [
-            "1 MARCADO LÁSER INTENSO",
-            "2 LIJADO MANUAL EN COSTURAS",
-            "3 DESTRUIDOS (RIPPED EFFECTS)"
-        ],
+        "Info": {"Tela": "MUESTRA NUEVA", "Corte": "OV-RETRAB", "Peso": "95 KG", "Pzas": "150 PZ"},
+        "Dry Process": ["1 MARCADO LÁSER", "2 LIJADO MANUAL", "3 DESTRUIDOS"],
         "Lavanderia": [
             {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "60°C - 15 min", "PRODUCTO QUÍMICO": "AMILASA"},
-            {"PASO": "2", "PROCESO": "OVERDYE (TEÑIDO)", "CONDICIONES": "50°C - 20 min", "PRODUCTO QUÍMICO": "COLORANTE REACTIVO"},
-            {"PASO": "3", "PROCESO": "SUAVIZADO", "CONDICIONES": "FRIO - 10 min", "PRODUCTO QUÍMICO": "SILICONA"}
+            {"PASO": "2", "PROCESO": "SUAVIZADO", "CONDICIONES": "FRIO - 10 min", "PRODUCTO QUÍMICO": "SILICONA"}
         ]
     }
 }
 
+# Esto hace que la lista se ordene alfabéticamente
 opciones = sorted(list(base_datos.keys()))
 seleccion = st.selectbox("Selecciona Código de Lavado:", ["-- Selecciona --"] + opciones)
 
@@ -131,7 +128,7 @@ if seleccion != "-- Selecciona --":
                     if os.path.exists(nombre_base + ext): return nombre_base + ext
                 return None
 
-            # --- FILA 1: COMPARATIVA FRONTAL ---
+            # --- COMPARATIVA FRONTAL ---
             st.subheader("🖼️ ANÁLISIS DE PATRÓN FRONTAL")
             col1, col2 = st.columns(2)
             with col1:
@@ -145,7 +142,7 @@ if seleccion != "-- Selecciona --":
 
             st.divider()
 
-            # --- FILA 2: COMPARATIVA TRASERA ---
+            # --- COMPARATIVA TRASERA ---
             st.subheader("🖼️ ANÁLISIS DE PATRÓN TRASERO")
             col3, col4 = st.columns(2)
             with col3:
