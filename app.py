@@ -30,7 +30,6 @@ st.markdown(
         text-shadow: none !important;
         font-weight: bold !important;
     }
-    /* Estilo para las pestañas (Tabs) */
     button[data-baseweb="tab"] {
         background-color: rgba(255, 255, 255, 0.1) !important;
         color: white !important;
@@ -63,8 +62,7 @@ st.markdown(
 st.markdown('<h1 class="laser-title">👖 Sistema de Gestión de Lavados</h1>', unsafe_allow_html=True)
 st.markdown("### Desarrollado por: **Luis Mc**")
 
-# --- BASE DE DATOS BASE (TWIN) ---
-# Nombre: [Pzas_por_hora_base, Intensidad, Area]
+# --- BASE DE DATOS BASE ---
 base_datos = {
     "MYYA": [70, "45%", "LÁSER"],
     "BLGU": [50, "45%", "LÁSER"],
@@ -84,13 +82,23 @@ base_datos = {
     "STONE": [0, "DESLAVE", "LAVANDERÍA"]
 }
 
+# --- DICCIONARIO DE FORMULAS (EJEMPLO DELT) ---
+formulas = {
+    "DELT": [
+        {"Paso": "Desengome", "Temp": "50°C", "Tiempo": "12 min", "Químicos": "Humectante, Amilasa"},
+        {"Paso": "Abrasión (Stone)", "Temp": "40°C", "Tiempo": "35 min", "Químicos": "Piedra Pómez, Enzima"},
+        {"Paso": "Bajada de Tono", "Temp": "40°C", "Tiempo": "5 min", "Químicos": "Cloro (5.0 KG)"},
+        {"Paso": "Neutralizado", "Temp": "Frío", "Tiempo": "4 min", "Químicos": "Bisulfito (2.0 KG)"},
+        {"Paso": "Suavizado", "Temp": "40°C", "Tiempo": "10 min", "Químicos": "Suavizante Mac, Silicon"}
+    ]
+}
+
 opciones = sorted(list(base_datos.keys()))
 seleccion = st.selectbox("Busca o selecciona un código:", ["-- Selecciona un lavado --"] + opciones)
 
 if seleccion != "-- Selecciona un lavado --":
     datos = base_datos[seleccion]
     pzas_hora_base = datos[0]
-    info_extra = datos[1]
     area = datos[2]
     
     st.divider()
@@ -98,43 +106,39 @@ if seleccion != "-- Selecciona un lavado --":
     if area == "LÁSER":
         st.subheader(f"📊 Reporte de Producción: {seleccion}")
         
-        # CREACIÓN DE PESTAÑAS PARA LAS MÁQUINAS
-        tab1, tab2, tab3 = st.tabs(["✳️ TWIN (Maniquí)", "❇️ FLEXI (Maniquí)", "✴️ FLEXI (Mesa)"])
+        # PESTAÑAS: Twin, Flexi M, Flexi Mesa + FÓRMULA
+        tab1, tab2, tab3, tab4 = st.tabs(["🚀 TWIN", "⚙️ FLEXI (M)", "🪑 FLEXI (Mesa)", "🧪 FÓRMULA"])
         
-        # Función para mostrar los cálculos
         def mostrar_calculos(pzas_hora):
             segundos = int(3600 / pzas_hora)
             minutos = segundos // 60
             seg_rest = segundos % 60
             tiempo_txt = f"{minutos} min {seg_rest} seg ({segundos} seg)"
-            
             c1, c2 = st.columns(2)
             with c1: st.metric("Tiempo por Prenda", tiempo_txt)
             with c2: st.metric("Prod. por Hora", f"{pzas_hora} pzas")
-            
-            st.markdown("**Capacidad por Jornada:**")
             horas = [8, 10, 12]
             df = pd.DataFrame({
                 "Horas": [f"{h}h" for h in horas],
-                "Total Prendas": [f"{h * pzas_hora} pzas" for h in horas]
+                "Total": [f"{h * pzas_hora} pzas" for h in horas]
             })
             st.table(df)
 
-        with tab1:
-            st.write("### Sistema Twin Doble Cañón")
-            mostrar_calculos(pzas_hora_base)
-
-        with tab2:
-            st.write("### Sistema Flexi Maniquí (Alta Velocidad)")
-            mostrar_calculos(pzas_hora_base + 8)
-
-        with tab3:
-            st.write("### Sistema Flexi Mesa (Manual)")
-            mostrar_calculos(pzas_hora_base - 5)
+        with tab1: mostrar_calculos(pzas_hora_base)
+        with tab2: mostrar_calculos(pzas_hora_base + 8)
+        with tab3: mostrar_calculos(pzas_hora_base - 5)
+        
+        with tab4:
+            if seleccion in formulas:
+                st.write(f"### Receta de Lavado: {seleccion}")
+                df_formula = pd.DataFrame(formulas[seleccion])
+                st.table(df_formula)
+            else:
+                st.warning("Fórmula no cargada aún. Pásale el archivo a Luis.")
             
     else:
         st.subheader(f"🧼 Detalle Lavandería: {seleccion}")
-        st.info(f"📍 Área: {area} | ⚙️ Proceso: {info_extra}")
+        st.info(f"📍 Área: {area} | ⚙️ Proceso: {datos[1]}")
 
 st.sidebar.markdown("---")
-st.sidebar.write(f"✅ Lavado actual: {seleccion}")
+st.sidebar.write(f"✅ Lavado: {seleccion}")
