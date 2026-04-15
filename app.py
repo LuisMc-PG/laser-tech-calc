@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import math
 
-# Configuración de página con icono de láser
-st.set_page_config(page_title="Sistema Control Textil", page_icon="⚡")
+# Configuración de página con nuevo icono de precisión (target)
+st.set_page_config(page_title="Sistema Control Textil", page_icon="🎯")
 
-# --- ESTILOS CSS PARA FONDO DE MEZCLILLA Y TEXTO ---
+# --- ESTILOS CSS MEJORADOS PARA LEGIBILIDAD TOTAL ---
 st.markdown(
     """
     <style>
@@ -16,22 +16,34 @@ st.markdown(
         background-attachment: fixed;
     }
 
-    /* Estilo para que los títulos y textos sean legibles sobre el fondo oscuro */
-    h1, h2, h3, h4, h5, h6, p, span, .stSelectbox label {
+    /* --- SOLUCIÓN DE CONTRASTE --- */
+    /* Forzar color BLANCO con contorno NEGRO sutil para TODO el texto */
+    html, body, [data-testid="stWidgetLabel"], .stSelectbox label, p, div, span, h1, h2, h3, h4, h5, h6 {
         color: white !important;
+        text-shadow: 
+            -1px -1px 0 #000,  
+             1px -1px 0 #000,
+            -1px  1px 0 #000,
+             1px  1px 0 #000 !important; /* Contorno negro para legibilidad */
     }
 
-    /* Fondo blanco semi-transparente para las tablas y métricas */
+    /* Fondo blanco semi-transparente para las tablas y métricas (mantener contraste interno) */
     .stMetric, .stDataFrame, div[data-testid="stTable"] {
         background-color: rgba(255, 255, 255, 0.9) !important;
         border-radius: 10px;
         padding: 10px;
     }
     
-    /* Estilo para el título principal con efecto neón láser */
+    /* Reajustar texto DENTRO de métricas y tablas para que sea oscuro */
+    .stMetric div, .stDataFrame div, div[data-testid="stTable"] div {
+        color: #1a4175 !important;
+        text-shadow: none !important; /* Quitar contorno dentro de fondos claros */
+    }
+    
+    /* Estilo para el título principal con efecto neón láser verde */
     .laser-title {
         color: #00ff00; /* Verde láser */
-        text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+        text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00 !important;
         font-family: 'Courier New', monospace;
         font-weight: bold;
     }
@@ -40,8 +52,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- TÍTULO CON EFECTO LÁSER ---
-st.markdown('<h1 class="laser-title">⚡ Sistema de Gestión de Lavados</h1>', unsafe_allow_html=True)
+# --- TÍTULO CON EFECTO LÁSER Y NUEVO EMOJI 🎯 ---
+st.markdown('<h1 class="laser-title">🎯 Sistema de Gestión de Lavados</h1>', unsafe_allow_html=True)
 st.markdown("### Desarrollado por: **Luis Mc**")
 
 # --- BASE DE DATOS MAESTRA ---
@@ -83,9 +95,9 @@ if seleccion != "-- Selecciona un lavado --":
     st.divider()
     
     if area == "LÁSER":
-        st.subheader(f"⚡ Información de Láser: {seleccion}")
+        st.subheader(f"🎯 Información de Láser: {seleccion}")
         
-        # Formato de tiempo que pidió el jefe (Minutos y Segundos)
+        # Formato de tiempo (Minutos y Segundos)
         minutos = segundos_totales // 60
         segundos_rest = segundos_totales % 60
         tiempo_texto = f"{minutos} min {segundos_rest} seg ({segundos_totales} seg)"
@@ -110,7 +122,7 @@ if seleccion != "-- Selecciona un lavado --":
     else:
         # Si es un proceso de Lavandería
         st.subheader(f"🧼 Información de Lavandería: {seleccion}")
-        # Usamos st.warning para resaltar, pero el CSS se asegura de que sea legible
+        # Alerta amarilla legible gracias al CSS
         st.warning(f"Este código pertenece al área de **{area}**")
         st.info(f"⚙️ **Proceso requerido:** {info_extra}")
         st.caption("Nota: Este proceso no se realiza en las máquinas láser.")
@@ -118,4 +130,4 @@ if seleccion != "-- Selecciona un lavado --":
 # Pie de página profesional
 st.sidebar.markdown("---")
 st.sidebar.write("✅ **Base de datos actualizada**")
-st.sidebar.write(f"Total de códigos: {len(base_datos)}")
+st.sidebar.write(f"
