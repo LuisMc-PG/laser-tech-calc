@@ -1,12 +1,12 @@
 import streamlit as st
 import pandas as pd
 import os
-from PIL import Image # Libería nueva para manejar imágenes
+from PIL import Image
 
-# Configuración de la App con estilo Denim 👖
+# Configuración de la App 👖
 st.set_page_config(page_title="Sistema Control Textil", page_icon="👖", layout="wide")
 
-# --- ESTILOS CSS PERSONALIZADOS ---
+# --- ESTILOS CSS ---
 st.markdown(
     """
     <style>
@@ -25,7 +25,6 @@ st.markdown(
     }
     div[data-baseweb="select"] span, div[data-baseweb="select"] div {
         color: #000000 !important;
-        text-shadow: none !important;
         font-weight: bold !important;
     }
     button[data-baseweb="tab"] {
@@ -66,30 +65,31 @@ base_datos = {
     "OVRW": {
         "pzas_base": 43,
         "intensidades": {"twin": "90tpx", "flexi_m": "70tpx", "flexi_mesa": "56tpx"}
-    },
-    "MYYA": {"pzas_base": 70},
-    "BLGU": {"pzas_base": 50},
-    "ZRCN": {"pzas_base": 56},
-    "BFOW": {"pzas_base": 43}
+    }
 }
 
-# --- FÓRMULAS MAESTRAS ---
+# --- FÓRMULAS MAESTRAS (Información real del archivo OVRW) ---
 formulas_maestras = {
     "DELT": {
         "Info": {"Tela": "ECO BLUE (NUME)", "Corte": "MN15446-2", "Peso": "100 KG", "Pzas": "169 PZ"},
         "Dry Process": ["1 BIGOTES TALLADOS", "2 HAND SAND", "3 LASER", "4 PLASTIFLECHA"],
         "Lavanderia": [
-            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "50°C - 12 min", "PRODUCTO QUÍMICO": "HUMECTANTE"},
-            {"PASO": "2", "PROCESO": "STONE", "CONDICIONES": "40°C - 35 min", "PRODUCTO QUÍMICO": "ENZIMA"},
-            {"PASO": "3", "PROCESO": "SECADO", "CONDICIONES": "60°C - 60 min", "PRODUCTO QUÍMICO": "N/A"}
+            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "50°C - 12 min", "PRODUCTO QUÍMICO": "HUMECTANTE"}
         ]
     },
     "OVRW": {
-        "Info": {"Tela": "MUESTRA NUEVA", "Corte": "OV-RETRAB", "Peso": "95 KG", "Pzas": "150 PZ"},
-        "Dry Process": ["1 MARCADO LÁSER", "2 LIJADO MANUAL", "3 DESTRUIDOS"],
+        "Info": {"Tela": "ECO BLUE", "Corte": "SKINNY BASIC JEAN", "Peso": "100 KG", "Pzas": "150 PZ"},
+        "Dry Process": [
+            "1 BIGOTES (DIBUJADOS DELANTEROS – CHEVRONS)",
+            "2 HAND SAND (FIGURA – BASE – MANCHON)"
+        ],
         "Lavanderia": [
-            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "60°C - 15 min", "PRODUCTO QUÍMICO": "AMILASA"},
-            {"PASO": "2", "PROCESO": "SUAVIZADO", "CONDICIONES": "FRIO - 10 min", "PRODUCTO QUÍMICO": "SILICONA"}
+            {"PASO": "1", "PROCESO": "DESENGOME", "CONDICIONES": "FRIO - 10 min", "PRODUCTO QUÍMICO": "ANTIDHER / SANDOCLEAN / ALFADHER"},
+            {"PASO": "2", "PROCESO": "SOPLAR SKY (MANUAL)", "CONDICIONES": "FIGURA-BASE-MANCHON", "PRODUCTO QUÍMICO": "NEARBLEACH / CATALINE SKY / PEROXIDO"},
+            {"PASO": "3", "PROCESO": "NEUTRALIZADO", "CONDICIONES": "FRIO - 5 min", "PRODUCTO QUÍMICO": "HIDROXILAMINA (2.0 KG)"},
+            {"PASO": "4", "PROCESO": "ENJUAGUE", "CONDICIONES": "30°C - 3 min", "PRODUCTO QUÍMICO": "AGUA SOLA"},
+            {"PASO": "5", "PROCESO": "ABRASIÓN", "CONDICIONES": "FRIO - 20 min", "PRODUCTO QUÍMICO": "HERZYME H CONC / ANTIDHER / SANDOCLEAN / PROTECTHER BA"},
+            {"PASO": "6", "PROCESO": "ENJUAGUE", "CONDICIONES": "FRIO - 3 min", "PRODUCTO QUÍMICO": "AGUA SOLA"}
         ]
     }
 }
@@ -122,44 +122,34 @@ if seleccion != "-- Selecciona --":
             f = formulas_maestras[seleccion]
             st.success(f"📋 VISUALIZACIÓN Y CONTRASTE: PATRÓN DE DISEÑO VS. ACABADO TEXTIL - {seleccion}")
             
-            # Función MEJORADA para buscar y arreglar la rotación
             def buscar_y_rotar_img(nombre_base):
                 img_path = None
                 for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
                     if os.path.exists(nombre_base + ext):
                         img_path = nombre_base + ext
                         break
-                
                 if img_path:
                     try:
-                        # Abrimos la imagen con Pillow
                         image = Image.open(img_path)
-                        # Obtenemos ancho y alto
                         width, height = image.size
-                        
-                        # Si es más ancha que alta, es horizontal. La rotamos 90 grados a la derecha.
                         if width > height:
                             image = image.rotate(-90, expand=True)
                         return image
-                    except Exception as e:
-                        return None # Si algo falla, no muestra nada
+                    except: return None
                 return None
 
             # --- COMPARATIVA FRONTAL ---
             st.subheader("🖼️ ANÁLISIS DE PATRÓN FRONTAL")
             col1, col2 = st.columns(2)
             with col1:
-                # Ojo: los BMP no se rotan porque esos ya vienen bien de Photoshop
-                img_bmp = None
+                img_path = None
                 for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
                     if os.path.exists(f"{seleccion}_frente_bmp" + ext):
-                        img_bmp = f"{seleccion}_frente_bmp" + ext
+                        img_path = f"{seleccion}_frente_bmp" + ext
                         break
-                if img_bmp: st.image(img_bmp, caption="Patrón Digital (Frente)", use_container_width=True)
+                if img_path: st.image(img_path, caption="Patrón Digital (Frente)", use_container_width=True)
                 else: st.info(f"Pendiente: {seleccion}_frente_bmp.png")
-            
             with col2:
-                # Usamos la función mejorada para la prenda LAVADA
                 img_lavado = buscar_y_rotar_img(f"{seleccion}_frente_lavado")
                 if img_lavado: st.image(img_lavado, caption="Resultado Post-Lavado (Frente)", use_container_width=True)
                 else: st.info(f"Pendiente: {seleccion}_frente_lavado.png")
@@ -170,18 +160,16 @@ if seleccion != "-- Selecciona --":
             st.subheader("🖼️ ANÁLISIS DE PATRÓN TRASERO")
             col3, col4 = st.columns(2)
             with col3:
-                img_bmp_tras = None
+                img_path_t = None
                 for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
                     if os.path.exists(f"{seleccion}_trasera_bmp" + ext):
-                        img_bmp_tras = f"{seleccion}_trasera_bmp" + ext
+                        img_path_t = f"{seleccion}_trasera_bmp" + ext
                         break
-                if img_bmp_tras: st.image(img_bmp_tras, caption="Patrón Digital (Trasera)", use_container_width=True)
+                if img_path_t: st.image(img_path_t, caption="Patrón Digital (Trasera)", use_container_width=True)
                 else: st.info(f"Pendiente: {seleccion}_trasera_bmp.png")
-            
             with col4:
-                # Usamos la función mejorada para la prenda LAVADA trasera
-                img_lavado_tras = buscar_y_rotar_img(f"{seleccion}_trasera_lavado")
-                if img_lavado_tras: st.image(img_lavado_tras, caption="Resultado Post-Lavado (Trasera)", use_container_width=True)
+                img_lavado_t = buscar_y_rotar_img(f"{seleccion}_trasera_lavado")
+                if img_lavado_t: st.image(img_lavado_t, caption="Resultado Post-Lavado (Trasera)", use_container_width=True)
                 else: st.info(f"Pendiente: {seleccion}_trasera_lavado.png")
             
             st.divider()
@@ -193,7 +181,7 @@ if seleccion != "-- Selecciona --":
             with col_b:
                 st.write("**DATOS TÉCNICOS:**")
                 st.write(f"Tela: {f['Info']['Tela']}")
-                st.write(f"Corte: {f['Info']['Corte']}")
+                st.write(f"Prenda: {f['Info']['Corte']}")
                 st.write(f"Carga: {f['Info']['Peso']} / {f['Info']['Pzas']}")
 
             st.write("**L A V A N D E R Í A:**")
