@@ -3,10 +3,10 @@ import pandas as pd
 import os
 from PIL import Image
 
-# Configuración de la App 👖
+# 1. Configuración de la App 👖
 st.set_page_config(page_title="Sistema Control Textil", page_icon="👖", layout="wide")
 
-# --- ESTILOS CSS ---
+# 2. --- ESTILOS CSS (La "piel" de la aplicación) ---
 st.markdown(
     """
     <style>
@@ -56,7 +56,7 @@ st.markdown(
 st.markdown('<h1 class="laser-title">👖 Sistema de Gestión de Lavados</h1>', unsafe_allow_html=True)
 st.caption(f"Ingeniería de Procesos | Luis Mc")
 
-# --- BASE DE DATOS MAESTRA ---
+# 3. --- BASE DE DATOS MAESTRA ---
 base_datos = {
     "DELT": {"pzas_base": 40, "lleva_laser": True, "intensidades": {"twin": "100tpx", "flexi_m": "90tpx", "flexi_mesa": "80tpx"}},
     "OVRW": {"pzas_base": 43, "lleva_laser": True, "intensidades": {"twin": "90tpx", "flexi_m": "70tpx", "flexi_mesa": "56tpx"}},
@@ -95,7 +95,7 @@ formulas_maestras = {
     }
 }
 
-# --- FUNCIONES DE APOYO ---
+# 4. --- FUNCIONES DE APOYO ---
 def mostrar_imagen_optimizada(nombre_base, es_bmp=False):
     img_path = None
     for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
@@ -110,8 +110,10 @@ def mostrar_imagen_optimizada(nombre_base, es_bmp=False):
                 if width > height:
                     image = image.rotate(-90, expand=True)
             st.image(image, use_container_width=True)
-        except: st.error("Error al cargar imagen")
-    else: st.info(f"Pendiente: {nombre_base}")
+        except: 
+            st.error("Error al cargar imagen")
+    else: 
+        st.info(f"Pendiente de subir imagen para: {nombre_base}")
 
 def calcular_metas_tabla(pzas_hora):
     df_metas = pd.DataFrame({
@@ -120,6 +122,52 @@ def calcular_metas_tabla(pzas_hora):
     })
     st.table(df_metas)
 
-# --- INTERFAZ PRINCIPAL ---
+# 5. --- INTERFAZ PRINCIPAL (Donde estaba el error) ---
 opciones = sorted(list(base_datos.keys()))
-seleccion = st.selectbox("Busca o Selecciona Código
+seleccion = st.selectbox("Busca o Selecciona Código de Lavado:", opciones)
+
+# Creación de Pestañas
+tab1, tab2, tab3 = st.tabs(["📊 Métricas de Producción", "🧪 Receta / Fórmula", "📸 Diseño Visual"])
+
+with tab1:
+    st.header(f"Producción - {seleccion}")
+    pzas_h = base_datos[seleccion]["pzas_base"]
+    
+    col_metrica, col_laser = st.columns(2)
+    with col_metrica:
+        st.metric("Capacidad Base", f"{pzas_h} Pzas/Hora")
+    with col_laser:
+        lleva = "SÍ ✅" if base_datos[seleccion]["lleva_laser"] else "NO ❌"
+        st.metric("Proceso Láser", lleva)
+    
+    st.subheader("Planificación de Metas")
+    calcular_metas_tabla(pzas_h)
+
+with tab2:
+    st.header("Instrucciones de Lavandería")
+    datos_formula = formulas_maestras[seleccion]
+    
+    # Mostrar Info General
+    st.markdown("### 📋 Datos del Lote")
+    info = datos_formula["Info"]
+    c1, c2, c3, c4 = st.columns(4)
+    c1.write(f"**Tela:** \n{info['Tela']}")
+    c2.write(f"**Corte:** \n{info['Corte']}")
+    c3.write(f"**Peso:** \n{info['Peso']}")
+    c4.write(f"**Cant:** \n{info['Pzas']}")
+    
+    st.divider()
+    
+    # Procesos
+    st.markdown("### 🧼 Pasos de Lavado")
+    df_lavado = pd.DataFrame(datos_formula["Lavanderia"])
+    st.table(df_lavado)
+    
+    st.markdown("### 🛠 Dry Process (Acabados)")
+    for proceso in datos_formula["Dry Process"]:
+        st.write(f"- {proceso}")
+
+with tab3:
+    st.header("Referencia de Diseño")
+    st.write(f"Mostrando archivos relacionados con el código: **{seleccion}**")
+    mostrar_imagen_optimizada(seleccion)
