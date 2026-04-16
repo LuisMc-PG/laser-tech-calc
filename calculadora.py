@@ -123,4 +123,37 @@ with tab4:
         "**9. ENJUAGUE:** NIVEL: 500 LTS | TEMP: FRIO °C | TIEMPO: 4 MIN | (AGUA SOLA)",
         "**10. CENTRIFUGADO:** TIEMPO: 10 MIN",
         "**11. SECADO:** TIEMPO: 60 MIN | TEMP: 60 °C",
-        "**12. POTASIO SOPLADO:** 15 C/ÁC
+        "**12. POTASIO SOPLADO:** 15 C/ÁCIDO (FIGURA, BASE, BRISEADO)",
+        "**13. QUITAR PLASTIFLECHA**"
+    ]
+    
+    for p in procesos_1:
+        st.markdown(f'<div class="step-box">{p}</div>', unsafe_allow_html=True)
+
+    st.write("---")
+    st.subheader("🌊 LAVANDERÍA – SEGUNDA ETAPA")
+    
+    procesos_2 = [
+        "**14. NEUTRALIZADO:** NIVEL: 400 LTS | TEMP: FRIO °C | TIEMPO: 4 MIN | (HIDROXILAMINA 2 KG, ANTIDHER 2 KG, SANDOCLEAN 20 KG)",
+        "**15. ENJUAGUE:** NIVEL: 400 LTS | TEMP: FRIO °C | TIEMPO: 4 MIN | (AGUA SOLA)",
+        "**16. BAJADA DE TONO:** NIVEL: 800 LTS | TEMP: 40 °C | TIEMPO: 5 MIN | (CLORO 5 KG)",
+        "**17. NEUTRALIZADO:** NIVEL: 600 LTS | TEMP: FRIO °C | TIEMPO: 6 MIN | (BISULFITO 11 KG)",
+        "**18. ENJUAGUE:** NIVEL: 400 LTS | TEMP: FRIO °C | TIEMPO: 5 MIN | (AGUA SOLA)",
+        "**19. SUAVIZADO:** NIVEL: 400 LTS | TEMP: FRIO °C | TIEMPO: 3 MIN | (FINISH SOFT 5-3: 2 KG)",
+        "**20. CENTRIFUGADO:** TIEMPO: 10 MIN",
+        "**21. SECADO:** TIEMPO: 60 MIN | TEMP: 60 °C",
+        "**22. BIGOTES PLANCHADOS:** DELANTEROS"
+    ]
+    
+    for p in procesos_2:
+        st.markdown(f'<div class="step-box">{p}</div>', unsafe_allow_html=True)
+
+# Sección de imágenes
+st.write("---")
+if st.checkbox("Mostrar referencias visuales (Fotos)"):
+    col_img1, col_img2 = st.columns(2)
+    path = "./fotos/"
+    with col_img1:
+        st.image(path + "DELT_frente_lavado.jpg", caption="PRENDA LAVADA - FRENTE")
+    with col_img2:
+        st.image(path + "DELT_trasera_lavado.jpg", caption="PRENDA LAVADA - TRASERA")
