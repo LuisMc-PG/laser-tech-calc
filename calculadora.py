@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide",
 )
 
-# Estilo visual oscuro
+# Estilo visual oscuro profesional
 st.markdown("""
     <style>
     .stApp { background-color: #0d1117; color: #c9d1d9; }
@@ -40,7 +40,7 @@ lavado_seleccionado = st.selectbox(
     ["DELT", "OVRW"]
 )
 
-# Lógica de datos según el lavado
+# Lógica de datos según el lavado seleccionado
 if lavado_seleccionado == "DELT":
     info_gral = {
         "fecha": "12/JUN/2024", "prenda": "MATEO JEAN", "tela": "ECO BLUE (NUME)",
@@ -93,7 +93,7 @@ with tab1: mostrar_info_maquina("Twin (Maniquí)")
 with tab2: mostrar_info_maquina("Flexi (Maniquí)")
 with tab3: mostrar_info_maquina("Flexi (Mesa)")
 
-# Pestaña 4: Ficha Técnica Dinámica Completa
+# Pestaña 4: Ficha Técnica Dinámica
 with tab4:
     st.header(f"🧪 Fórmula Detallada: {lavado_seleccionado}")
     col_a, col_b = st.columns(2)
@@ -160,13 +160,11 @@ st.write("---")
 if st.checkbox("🔍 Ver Comparativa Completa (BMP vs Lavado)", value=True):
     path = "./fotos/"
     
-    # Esta función ayuda a "parar" las fotos si Streamlit las acuesta
     st.subheader(f"📸 VISTA FRONTAL - {lavado_seleccionado}")
     col1, col2 = st.columns(2)
     with col1: 
         st.image(f"{path}{img_prefix}_frente_bmp.jpg", caption="DISEÑO (BMP)", use_container_width=True)
     with col2: 
-        # Si la foto de lavado se ve acostada, aquí la corregimos
         st.image(f"{path}{img_prefix}_frente_lavado.jpg", caption="LAVADO FINAL", use_container_width=True)
     
     st.write("---")
@@ -175,5 +173,4 @@ if st.checkbox("🔍 Ver Comparativa Completa (BMP vs Lavado)", value=True):
     with col3: 
         st.image(f"{path}{img_prefix}_trasera_bmp.jpg", caption="DISEÑO (BMP)", use_container_width=True)
     with col4: 
-        # Si la foto trasera se ve acostada, aquí la corregimos
         st.image(f"{path}{img_prefix}_trasera_lavado.jpg", caption="LAVADO FINAL", use_container_width=True)
