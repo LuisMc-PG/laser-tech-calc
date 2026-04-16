@@ -47,9 +47,9 @@ if lavado_seleccionado == "DELT":
         "peso": "100 KG", "piezas": "169 PZAS", "contenido": "77%COTTON 13%LYOCELL 6%POLYESTER 2%ELASTERELL 2%SPANDEX"
     }
     datos_maquinas = {
-        "Twin (Maniquí)": {"pzas_hora": 40, "intensidad": "100 tpx"},
-        "Flexi (Maniquí)": {"pzas_hora": 48, "intensidad": "80 tpx"},
-        "Flexi (Mesa)": {"pzas_hora": 36, "intensidad": "68 tpx"}
+        "Twin (Maniquí)": {"pzas_hora": 40},
+        "Flexi (Maniquí)": {"pzas_hora": 48},
+        "Flexi (Mesa)": {"pzas_hora": 36}
     }
     img_prefix = "DELT"
 else:
@@ -58,15 +58,15 @@ else:
         "peso": "100 KG", "piezas": "150 PZAS", "contenido": "77%COTTON 13%LYOCELL 6%POLYESTER 2%ELASTERELL 2%SPANDEX"
     }
     datos_maquinas = {
-        "Twin (Maniquí)": {"pzas_hora": 50, "intensidad": "Intensidad OVRW"},
-        "Flexi (Maniquí)": {"pzas_hora": 58, "intensidad": "Intensidad OVRW"},
-        "Flexi (Mesa)": {"pzas_hora": 50, "intensidad": "Intensidad OVRW"}
+        "Twin (Maniquí)": {"pzas_hora": 50},
+        "Flexi (Maniquí)": {"pzas_hora": 58},
+        "Flexi (Mesa)": {"pzas_hora": 50}
     }
     img_prefix = "OVRW"
 
-st.info(f"**FECHA:** {info_gral['fecha']} | **TELA:** {info_gral['tela']} | **PRENDA:** {info_gral['prenda']}")
+st.info(f"**PROCESANDO:** {lavado_seleccionado} | **PRENDA:** {info_gral['prenda']} | **TELA:** {info_gral['tela']}")
 
-# 2. Pestañas
+# 2. Pestañas de Máquinas
 tab1, tab2, tab3, tab4 = st.tabs(["Twin (Maniquí)", "Flexi (Maniquí)", "Flexi (Mesa)", "🧪 Ficha Técnica"])
 
 def mostrar_info_maquina(nombre_maquina):
@@ -93,32 +93,80 @@ with tab1: mostrar_info_maquina("Twin (Maniquí)")
 with tab2: mostrar_info_maquina("Flexi (Maniquí)")
 with tab3: mostrar_info_maquina("Flexi (Mesa)")
 
-# Pestaña 4: Ficha Técnica Dinámica
+# Pestaña 4: Ficha Técnica Dinámica Completa
 with tab4:
-    st.header(f"🧪 Fórmula de Lavado: {lavado_seleccionado}")
+    st.header(f"🧪 Fórmula Detallada: {lavado_seleccionado}")
     col_a, col_b = st.columns(2)
     with col_a:
-        st.markdown(f"**INFO GENERAL**\n* **CONTENIDO:** {info_gral['contenido']}\n* **PESO:** {info_gral['peso']}\n* **PIEZAS:** {info_gral['piezas']}")
+        st.markdown(f"**INFO GENERAL**\n* **FECHA:** {info_gral['fecha']}\n* **CONTENIDO:** {info_gral['contenido']}\n* **PESO:** {info_gral['peso']}\n* **PIEZAS:** {info_gral['piezas']}")
     
     if lavado_seleccionado == "DELT":
         with col_b: st.markdown("**DRY PROCESS**\n* LASER: BIGOTES, RODILLA\n* PLASTIFLECHA")
         st.subheader("🌊 PROCESO DE LAVANDERÍA")
-        pasos = ["1. DESENGOME: 600 LTS / 8 MIN", "2. ABRASION: 400 LTS / 45 MIN"] # (Aquí va tu lista larga anterior)
-    else:
-        with col_b: st.markdown("**DRY PROCESS**\n* BIGOTES DIBUJADOS\n* HAND SAND FIGURA\n* DESTROY")
-        st.subheader("🌊 PROCESO DE LAVANDERÍA (ETAPA 1)")
-        pasos_ovrw = [
-            "**1. DESENGOME:** 600 LTS | FRIO | 10 MIN | ANTIDHER 1 KG, SANDOCLEAN 1 KG, ALFADHER 300 GRS, PROTECTHER BA 500 GRS",
-            "**2. ENJUAGUE:** 400 LTS | FRIO | 3 MIN | AGUA SOLA",
-            "**3. ABRASION:** 300 LTS | FRIO | 60 MIN | HERZYME 400 GRS, ANTIDHER 1.2 KG, SANDOCLEAN 1.2 KG",
-            # ... se agregarán todos los demás pasos en el siguiente paso
+        pasos = [
+            "1. DESENGOME: 600 LTS | FRIO | 8 MIN | ANTIDHER 1 KG, SANDOCLEAN 1 KG, BET 500 GRS, PROTECTHER BA 500 GRS",
+            "2. ENJUAGUE: 400 LTS | FRIO | 3 MIN | AGUA SOLA",
+            "3. ABRASION: 400 LTS | FRIO | 45 MIN | ANTIDHER 2 KG, SANDOCLEAN 2 KG, H CON 600 GRS, PROTECTHER BA 600 GRS",
+            "4. ENJUAGUE: 600 LTS | FRIO | 3 MIN",
+            "5. ENJUAGUE: 600 LTS | FRIO | 3 MIN",
+            "6. BAJADA DE TONO: 800 LTS | 40 °C | 23 MIN | CLORO 40",
+            "7. ENJUAGUE: 400 LTS | FRIO | 1 MIN",
+            "8. NEUTRALIZADO: 600 LTS | FRIO | 8 MIN",
+            "9. ENJUAGUE: 500 LTS | FRIO | 4 MIN",
+            "10. CENTRIFUGADO: 10 MIN",
+            "11. SECADO: 60 MIN | 60 °C",
+            "12. POTASIO SOPLADO: 15 C/ÁCIDO",
+            "13. QUITAR PLASTIFLECHA",
+            "14. SEGUNDA ETAPA - NEUTRALIZADO: 400 LTS | 4 MIN",
+            "15. BAJADA DE TONO: 800 LTS | 40 °C | 5 MIN | CLORO 5 KG",
+            "16. NEUTRALIZADO: 600 LTS | 6 MIN | BISULFITO 11 KG",
+            "17. SUAVIZADO: 400 LTS | 3 MIN | FINISH SOFT 2 KG",
+            "18. SECADO FINAL: 60 MIN | 60 °C",
+            "19. BIGOTES PLANCHADOS"
         ]
-        for p in pasos_ovrw: st.markdown(f'<div class="step-box">{p}</div>', unsafe_allow_html=True)
+    else:
+        with col_b: st.markdown("**DRY PROCESS**\n* BIGOTES DIBUJADOS DELANTEROS – CHEVRONS\n* HAND SAND FIGURA – BASE – MANCHON\n* DESTROY")
+        st.subheader("🌊 PROCESO DE LAVANDERÍA (ETAPA 1)")
+        pasos = [
+            "1. DESENGOME: 600 LTS | FRIO | 10 MIN | ANTIDHER 1 KG, SANDOCLEAN 1 KG, ALFADHER 300 GRS, PROTECTHER BA 500 GRS",
+            "2. ENJUAGUE: 400 LTS | FRIO | 3 MIN | AGUA SOLA",
+            "3. ABRASION: 300 LTS | FRIO | 60 MIN | HERZYME 400 GRS, ANTIDHER 1.2 KG, SANDOCLEAN 1.2 KG, PROTECTHER BA 500 GRS",
+            "4. ENJUAGUE: 600 LTS | FRIO | 3 MIN | ANTIDHER 600 GRS, SANDOCLEAN 600 GRS",
+            "5. ENJUAGUE: 600 LTS | FRIO | 3 MIN | AGUA SOLA",
+            "6. ENJUAGUE: 600 LTS | FRIO | 3 MIN | AGUA SOLA",
+            "7. ENJUAGUE: 600 LTS | FRIO | 3 MIN | ALCAPER 500 GRS",
+            "8. ENJUAGUE: 600 LTS | FRIO | 3 MIN | AGUA SOLA",
+            "9. CENTRIFUGADO: 8 MIN",
+            "10. SECADO: 60 MIN | 60 °C",
+            "11. SOPLAR SKY: FIGURA – BASE – MANCHÓN | NEARBLEACH 350 GRS, CATALINE SKY 75 GRS, PEROXIDO 75 GRS",
+            "**--- SEGUNDA ETAPA (CURAR EN SECADORA 90ºC 30 MIN) ---**",
+            "12. NEUTRALIZADO: 600 LTS | FRIO | 5 MIN | HIDROXILAMINA 2 KG",
+            "13. ENJUAGUE: 400 LTS | 30 °C | 3 MIN",
+            "14. ABRASION: 200 LTS | 30 °C | 20 MIN | HERZYME 150 GRS, ANTIDHER 1 KG, SANDOCLEAN 1 KG, PROTECTHER BA 300 GRS",
+            "15. ENJUAGUE: 400 LTS | FRIO | 3 MIN",
+            "16. ENJUAGUE: 400 LTS | FRIO | 9 MIN | HERTREX 500 GRS",
+            "17. ENJUAGUE: 400 LTS | FRIO | 3 MIN",
+            "18. SUAVIZADO: 400 LTS | FRIO | 3 MIN | FINISH SOFT 2 KG",
+            "19. CENTRIFUGADO: 8 MIN",
+            "20. SECADO: 60 MIN | 60 °C",
+            "21. BIGOTES PLANCHADOS - DELANTEROS"
+        ]
+    
+    for p in pasos:
+        st.markdown(f'<div class="step-box">{p}</div>', unsafe_allow_html=True)
 
-# 3. Comparativa de Fotos Dinámica
+# 3. Comparativa de Fotos Dinámica (BMP vs Lavado)
 st.write("---")
-if st.checkbox("🔍 Ver Comparativa (BMP vs Lavado)", value=True):
+if st.checkbox("🔍 Ver Comparativa Completa (BMP vs Lavado)", value=True):
     path = "./fotos/"
+    
+    st.subheader(f"📸 VISTA FRONTAL - {lavado_seleccionado}")
     col1, col2 = st.columns(2)
-    with col1: st.image(f"{path}{img_prefix}_frente_bmp.jpg", caption=f"BMP FRENTE {lavado_seleccionado}", use_container_width=True)
-    with col2: st.image(f"{path}{img_prefix}_frente_lavado.jpg", caption=f"LAVADO FRENTE {lavado_seleccionado}", use_container_width=True)
+    with col1: st.image(f"{path}{img_prefix}_frente_bmp.jpg", caption="DISEÑO (BMP)", use_container_width=True)
+    with col2: st.image(f"{path}{img_prefix}_frente_lavado.jpg", caption="LAVADO FINAL", use_container_width=True)
+    
+    st.write("---")
+    st.subheader(f"📸 VISTA TRASERA - {lavado_seleccionado}")
+    col3, col4 = st.columns(2)
+    with col3: st.image(f"{path}{img_prefix}_trasera_bmp.jpg", caption="DISEÑO (BMP)", use_container_width=True)
+    with col4: st.image(f"{path}{img_prefix}_trasera_lavado.jpg", caption="LAVADO FINAL", use_container_width=True)
