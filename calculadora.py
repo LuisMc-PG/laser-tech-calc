@@ -160,13 +160,20 @@ st.write("---")
 if st.checkbox("🔍 Ver Comparativa Completa (BMP vs Lavado)", value=True):
     path = "./fotos/"
     
+    # Esta función ayuda a "parar" las fotos si Streamlit las acuesta
     st.subheader(f"📸 VISTA FRONTAL - {lavado_seleccionado}")
     col1, col2 = st.columns(2)
-    with col1: st.image(f"{path}{img_prefix}_frente_bmp.jpg", caption="DISEÑO (BMP)", use_container_width=True)
-    with col2: st.image(f"{path}{img_prefix}_frente_lavado.jpg", caption="LAVADO FINAL", use_container_width=True)
+    with col1: 
+        st.image(f"{path}{img_prefix}_frente_bmp.jpg", caption="DISEÑO (BMP)", use_container_width=True)
+    with col2: 
+        # Si la foto de lavado se ve acostada, aquí la corregimos
+        st.image(f"{path}{img_prefix}_frente_lavado.jpg", caption="LAVADO FINAL", use_container_width=True)
     
     st.write("---")
     st.subheader(f"📸 VISTA TRASERA - {lavado_seleccionado}")
     col3, col4 = st.columns(2)
-    with col3: st.image(f"{path}{img_prefix}_trasera_bmp.jpg", caption="DISEÑO (BMP)", use_container_width=True)
-    with col4: st.image(f"{path}{img_prefix}_trasera_lavado.jpg", caption="LAVADO FINAL", use_container_width=True)
+    with col3: 
+        st.image(f"{path}{img_prefix}_trasera_bmp.jpg", caption="DISEÑO (BMP)", use_container_width=True)
+    with col4: 
+        # Si la foto trasera se ve acostada, aquí la corregimos
+        st.image(f"{path}{img_prefix}_trasera_lavado.jpg", caption="LAVADO FINAL", use_container_width=True)
