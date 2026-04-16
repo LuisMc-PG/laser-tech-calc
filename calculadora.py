@@ -22,11 +22,14 @@ st.markdown("""
     }
     .stTabs [aria-selected="true"] { background-color: #1f6feb !important; color: white !important; }
     .step-box {
-        background-color: #0d1117;
+        background-color: #161b22;
         padding: 15px;
         border-radius: 8px;
         border-left: 5px solid #58a6ff;
         margin-bottom: 10px;
+        border-top: 1px solid #30363d;
+        border-right: 1px solid #30363d;
+        border-bottom: 1px solid #30363d;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -88,13 +91,13 @@ with tab1: mostrar_info_maquina("Twin (Maniquí)")
 with tab2: mostrar_info_maquina("Flexi (Maniquí)")
 with tab3: mostrar_info_maquina("Flexi (Mesa)")
 
-# Pestaña 4: Ficha Técnica Completa (Sin Resúmenes)
+# Pestaña 4: Ficha Técnica Completa (Toda la información)
 with tab4:
     st.header("🧪 Fórmula de Lavado y Procesos: DELT")
     
     col_a, col_b = st.columns(2)
     with col_a:
-        st.markdown("""
+        st.markdown(f"""
         **INFORMACIÓN GENERAL**
         * **CONTENIDO:** 77% COTTON 13% LYOCELL 6% POLYESTER 2% ELASTERELL 2% SPANDEX
         * **PESO:** 100 KG
@@ -148,12 +151,22 @@ with tab4:
     for p in procesos_2:
         st.markdown(f'<div class="step-box">{p}</div>', unsafe_allow_html=True)
 
-# Sección de imágenes
+# 3. Sección de imágenes Comparativas (BMP vs Lavado)
 st.write("---")
-if st.checkbox("Mostrar referencias visuales (Fotos)"):
-    col_img1, col_img2 = st.columns(2)
+if st.checkbox("🔍 Abrir Comparativa de Diseños (BMP vs Lavado)", value=True):
     path = "./fotos/"
-    with col_img1:
-        st.image(path + "DELT_frente_lavado.jpg", caption="PRENDA LAVADA - FRENTE")
-    with col_img2:
-        st.image(path + "DELT_trasera_lavado.jpg", caption="PRENDA LAVADA - TRASERA")
+    
+    st.subheader("📸 Comparativa Frontal")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(path + "DELT_frente_bmp.jpg", caption="DISEÑO LÁSER (BMP) - FRENTE", use_container_width=True)
+    with col2:
+        st.image(path + "DELT_frente_lavado.jpg", caption="RESULTADO FINAL - FRENTE", use_container_width=True)
+    
+    st.write("---")
+    st.subheader("📸 Comparativa Trasera")
+    col3, col4 = st.columns(2)
+    with col3:
+        st.image(path + "DELT_trasera_bmp.jpg", caption="DISEÑO LÁSER (BMP) - TRASERA", use_container_width=True)
+    with col4:
+        st.image(path + "DELT_trasera_lavado.jpg", caption="RESULTADO FINAL - TRASERA", use_container_width=True)
