@@ -3,8 +3,7 @@ import pandas as pd
 
 st.title("👖 Sistema de Producción Láser")
 
-# 1. EL ARCHIVERO (Diccionario): Aquí guardaremos todos tus lavados futuros
-# Si mañana agregas otro, solo lo escribes aquí, no tocas el resto del código.
+# 1. EL ARCHIVERO (Diccionario)
 datos_lavados = {
     "DELT": {
         "Twin": {"velocidad": 40, "intensidad": "90 tpx"},
@@ -19,18 +18,16 @@ datos_lavados = {
 }
 
 # 2. LA LISTA DESPLEGABLE
-# Streamlit crea el menú y guarda lo que el usuario elija en la variable "lavado_elegido"
 lavado_elegido = st.selectbox("Selecciona el lavado:", ["DELT", "OVRW"])
-
 st.header(f"Lavado actual: {lavado_elegido}")
 
 # Sacamos los datos del archivero según lo que se eligió arriba
 datos_actuales = datos_lavados[lavado_elegido]
 
-# 3. Creamos las pestañas
-tab1, tab2, tab3 = st.tabs(["Twin", "Flexi-Maniquí", "Flexi-Mesa"])
+# 3. Creamos las CUATRO pestañas (agregué la de fotos aquí)
+tab1, tab2, tab3, tab4 = st.tabs(["Twin", "Flexi-Maniquí", "Flexi-Mesa", "📸 Comparativa"])
 
-# Función para calcular los tiempos y turnos (solo se escribe UNA vez)
+# Función para calcular los tiempos y turnos
 def mostrar_info_maquina(nombre_maquina, pzas_por_hora, intensidad):
     st.subheader(f"⚙️ Máquina: {nombre_maquina}")
     
@@ -57,7 +54,7 @@ def mostrar_info_maquina(nombre_maquina, pzas_por_hora, intensidad):
     
     st.table(pd.DataFrame(datos_turnos))
 
-# 4. Mostramos la información jalando los datos del "archivero"
+# 4. Llenamos las 3 pestañas de las máquinas
 with tab1:
     mostrar_info_maquina("Twin", datos_actuales["Twin"]["velocidad"], datos_actuales["Twin"]["intensidad"])
 
@@ -66,3 +63,23 @@ with tab2:
 
 with tab3:
     mostrar_info_maquina("Flexi-Mesa", datos_actuales["Flexi-Mesa"]["velocidad"], datos_actuales["Flexi-Mesa"]["intensidad"])
+
+# 5. Llenamos la pestaña de fotos con búsqueda automática
+with tab4:
+    st.subheader(f"Vista Frontal - {lavado_elegido}")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.image(f"fotos/{lavado_elegido}_frente_bmp.jpg", caption="Diseño Frente (BMP)")
+    with col2:
+        st.image(f"fotos/{lavado_elegido}_frente_lavado.jpg", caption="Resultado Frente (Lavado)")
+        
+    st.write("---") 
+    
+    st.subheader(f"Vista Trasera - {lavado_elegido}")
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        st.image(f"fotos/{lavado_elegido}_trasera_bmp.jpg", caption="Diseño Trasera (BMP)")
+    with col4:
+        st.image(f"fotos/{lavado_elegido}_trasera_lavado.jpg", caption="Resultado Trasera (Lavado)")
