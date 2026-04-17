@@ -3,17 +3,19 @@ import pandas as pd
 
 st.title("👖 Sistema de Producción Láser")
 
-# 1. EL ARCHIVERO (Diccionario)
+# 1. EL ARCHIVERO (Diccionario) - ¡Aquí agregamos los links!
 datos_lavados = {
     "DELT": {
         "Twin": {"velocidad": 40, "intensidad": "90 tpx"},
         "Flexi-Maniquí": {"velocidad": 46, "intensidad": "70 tpx"},
-        "Flexi-Mesa": {"velocidad": 35, "intensidad": "60 tpx"}
+        "Flexi-Mesa": {"velocidad": 35, "intensidad": "60 tpx"},
+        "link": "https://docs.google.com/spreadsheets/d/1Y6INggv8Uvjk3BJ7FHHxmSnOfG6_5_nm/edit?usp=drive_link&ouid=114257330921113170270&rtpof=true&sd=true"
     },
     "OVRW": {
         "Twin": {"velocidad": 50, "intensidad": "90 tpx"},
         "Flexi-Maniquí": {"velocidad": 56, "intensidad": "70 tpx"},
-        "Flexi-Mesa": {"velocidad": 45, "intensidad": "60 tpx"}
+        "Flexi-Mesa": {"velocidad": 45, "intensidad": "60 tpx"},
+        "link": "https://aqui-pondrás-el-link-del-ovrw-cuando-lo-tengas.com"
     }
 }
 
@@ -24,8 +26,8 @@ st.header(f"Lavado actual: {lavado_elegido}")
 # Sacamos los datos del archivero según lo que se eligió arriba
 datos_actuales = datos_lavados[lavado_elegido]
 
-# 3. Creamos las CUATRO pestañas (agregué la de fotos aquí)
-tab1, tab2, tab3, tab4 = st.tabs(["Twin", "Flexi-Maniquí", "Flexi-Mesa", "📸 Comparativa"])
+# 3. Creamos CINCO pestañas ahora
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Twin", "Flexi-Maniquí", "Flexi-Mesa", "📸 Comparativa", "🧪 Fórmula"])
 
 # Función para calcular los tiempos y turnos
 def mostrar_info_maquina(nombre_maquina, pzas_por_hora, intensidad):
@@ -64,7 +66,7 @@ with tab2:
 with tab3:
     mostrar_info_maquina("Flexi-Mesa", datos_actuales["Flexi-Mesa"]["velocidad"], datos_actuales["Flexi-Mesa"]["intensidad"])
 
-# 5. Llenamos la pestaña de fotos con búsqueda automática
+# 5. Llenamos la pestaña de fotos
 with tab4:
     st.subheader(f"Vista Frontal - {lavado_elegido}")
     col1, col2 = st.columns(2)
@@ -83,3 +85,11 @@ with tab4:
         st.image(f"fotos/{lavado_elegido}_trasera_bmp.jpg", caption="Diseño Trasera (BMP)")
     with col4:
         st.image(f"fotos/{lavado_elegido}_trasera_lavado.jpg", caption="Resultado Trasera (Lavado)")
+
+# 6. NUEVA PESTAÑA: El link de la Fórmula
+with tab5:
+    st.subheader(f"Fórmula Detallada - {lavado_elegido}")
+    st.write("Haz clic en el botón de abajo para abrir el archivo con la fórmula completa:")
+    
+    # Esto crea un botón interactivo que te manda al link que pusimos arriba
+    st.link_button("📂 Abrir Fórmula en Excel", datos_actuales["link"])
