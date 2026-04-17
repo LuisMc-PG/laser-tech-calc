@@ -4,8 +4,8 @@ import pandas as pd
 st.title("👖 Sistema de Producción Láser")
 st.header("Lavado: DELT")
 
-# Creamos las 3 pestañas para las máquinas
-tab1, tab2, tab3 = st.tabs(["Twin", "Flexi-Maniquí", "Flexi-Mesa"])
+# Creamos las 4 pestañas para las máquinas y las fotos
+tab1, tab2, tab3, tab4 = st.tabs(["Twin", "Flexi-Maniquí", "Flexi-Mesa", "📸 Comparativa"])
 
 # Función para calcular y mostrar la información de cada máquina sin repetir código
 def mostrar_info_maquina(nombre_maquina, pzas_por_hora, intensidad):
@@ -38,7 +38,7 @@ def mostrar_info_maquina(nombre_maquina, pzas_por_hora, intensidad):
     # Mostramos los resultados en una tabla
     st.table(pd.DataFrame(datos_turnos))
 
-# Metemos la información exacta que me diste en cada pestaña
+# Metemos la información en las 3 primeras pestañas
 with tab1:
     mostrar_info_maquina("Twin", 40, "90 tpx")
 
@@ -47,3 +47,24 @@ with tab2:
 
 with tab3:
     mostrar_info_maquina("Flexi-Mesa", 35, "60 tpx")
+
+# Llenamos la NUEVA pestaña de fotos con la ruta correcta hacia tu carpeta "fotos"
+with tab4:
+    st.subheader("Vista Frontal")
+    # Creamos dos columnas para poner las fotos lado a lado
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.image("fotos/DELT_frente_bmp.jpg", caption="Diseño Frente (BMP)")
+    with col2:
+        st.image("fotos/DELT_frente_lavado.jpg", caption="Resultado Frente (Lavado)")
+        
+    st.write("---") # Esto pone una línea divisoria
+    
+    st.subheader("Vista Trasera")
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        st.image("fotos/DELT_trasera_bmp.jpg", caption="Diseño Trasera (BMP)")
+    with col4:
+        st.image("fotos/DELT_trasera_lavado.jpg", caption="Resultado Trasera (Lavado)")
