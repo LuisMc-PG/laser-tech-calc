@@ -84,4 +84,22 @@ with tab4:
     with col1:
         st.image(f"fotos/{lavado_elegido}_frente_bmp.jpg", caption="Diseño Frente (BMP)")
     with col2:
-        st.image(f"fotos/{lavado_elegido}_frente_lavado.jpg", caption="Resultado Frente (Lavado
+        st.image(f"fotos/{lavado_elegido}_frente_lavado.jpg", caption="Resultado Frente (Lavado)")
+        
+    st.write("---") 
+    
+    st.subheader(f"Vista Trasera - {lavado_elegido}")
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        st.image(f"fotos/{lavado_elegido}_trasera_bmp.jpg", caption="Diseño Trasera (BMP)")
+    with col4:
+        st.image(f"fotos/{lavado_elegido}_trasera_lavado.jpg", caption="Resultado Trasera (Lavado)")
+
+# Llenamos la pestaña del link a Excel
+with tab5:
+    st.subheader(f"Fórmula Detallada - {lavado_elegido}")
+    st.write("Haz clic en el botón de abajo para abrir el archivo con la fórmula completa:")
+    
+    # Aquí se pone el link que conectamos en el archivero de arriba
+    st.link_button("📂 Abrir Fórmula en Excel", datos_actuales["link"])
